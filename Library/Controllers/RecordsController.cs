@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Library.Controllers
 {
-    public class BooksController : Controller
+    public class RecordsController : Controller
     {
         //
         // GET: /Books/
