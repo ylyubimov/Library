@@ -3,3 +3,4 @@
 /Library/bin
 /Library/*.user
 /*.suo
+.vs/
