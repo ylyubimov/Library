@@ -40,3 +40,33 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.blur {
+/* firefox uses SVG filters */
+filter: url(#A);
+/* IE specific */
+filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=10);
+
+-webkit-filter: blur(5px);
+-moz-filter: blur(5px);
+-ms-filter: blur(5px);
+-o-filter: blur(5px);
+filter: blur(5px);
+
+color: #666;
+}
+
+.blur:hover {
+/* firefox uses SVG filters */
+filter: url(#B);
+/* IE specific */
+filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=10);
+
+-webkit-filter: blur(0px);
+-moz-filter: blur(0px);
+-ms-filter: blur(0px);
+-o-filter: blur(0px);
+filter: blur(0px);
+
+color: #000;
+}
