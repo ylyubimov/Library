@@ -152,6 +152,7 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Records\Record.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
