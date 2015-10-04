@@ -11,6 +11,6 @@ namespace Library.Models
         public List<Record> Books { get; set; }
         public List<Publisher> Authors { get; set; }
 
-        public System.Data.Entity.DbSet<Library.Models.Record> Records { get; set; }
+        public DbSet<Record> Records { get; set; }
     }
 }
