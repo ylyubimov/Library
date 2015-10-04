@@ -9,6 +9,8 @@ namespace Library.Models
     public class LibraryContext : DbContext
     {
         public List<Record> Books { get; set; }
-        public List<Publisher> Authors { get; set; }  
+        public List<Publisher> Authors { get; set; }
+
+        public DbSet<Record> Records { get; set; }
     }
 }
