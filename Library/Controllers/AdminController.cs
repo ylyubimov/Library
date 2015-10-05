@@ -6,41 +6,36 @@ using System.Web.Mvc;
 
 using System.Text;
 using System.Threading.Tasks;
-using GhostscriptSharp;
-
+using Library.Models;
 
 namespace Library.Controllers
 {
     public class AdminController : Controller
     {
-        //
+        private LibraryContext db = new LibraryContext();
+
         // GET: /Admin/
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Login()
+        [HttpPost]
+        public ActionResult Add(Record record)
+        {  
+            db.Records.Add(record);
+            db.SaveChanges();    
+            return View(db); // ?
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id)
         {
+            var query = from record in db.Records
+                        where record.RecordId == id
+                        select record;
+            // todo
             return View();
         }
-        [HttpPost]
-        public ActionResult Index(IEnumerable<HttpPostedFileBase> fileUpload)
-        {
-            foreach (var file in fileUpload)
-            {
-                if (file == null) continue;
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
-                string filename = System.IO.Path.GetFileName(file.FileName);
-                if (filename != null) file.SaveAs(System.IO.Path.Combine(path, filename));
-                GhostscriptSharp.GhostscriptWrapper.GeneratePageThumb(@"C:\Users\acerPC\Documents\GitHub\Library\Library\Data\test.pdf", "test.png", 1, 100, 100);
-            }
-
-            return RedirectToAction("Index");
-        }
-        public FileResult downloadFile()
-        {
-            return File("../Data/test.pdf", "application/pdf");
-        }
-	}
+    }
 }

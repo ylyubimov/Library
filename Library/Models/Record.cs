@@ -10,6 +10,7 @@ namespace Library.Models
     {
         public int RecordId { get; set; }
         public string RecordName { get; set; }
+        public string RecordDescription { get; set; }
         public Publisher Author { get; set; }
     }
 }

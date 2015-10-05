@@ -23,7 +23,19 @@ namespace Library
                 name: "Record",
                 url: "Records/Record/{id}",
                 defaults: new { controller = "Records", action = "Record" }
-                );
+            );
+
+            routes.MapRoute(
+               name: "AddRecord",
+               url: "Admin/Add",
+               defaults: new { controller = "Admin", action = "Add" }
+            );
+
+            routes.MapRoute(
+               name: "EditRecord",
+               url: "Admin/Edit/{id}", 
+               defaults: new { controller = "Admin", action = "Edit" }
+            );
         }
     }
 }

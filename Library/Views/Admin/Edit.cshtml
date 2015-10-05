@@ -1,0 +1,17 @@
+﻿@model Library.Models.Record
+@{
+    ViewBag.Title = "Изменить информацию";
+}
+
+<h2>Изменить информацию о книге</h2>
+@{Html.BeginForm();}
+<div class="item">
+    <label>Название</label>
+    <input name="Name" value="@Model.RecordName" />
+</div>
+<div class="item">
+    <label>Описание</label>
+    <input name="Description" value="@Model.RecordDescription" />
+</div>
+<input type="submit" value="Отправить" />
+@{Html.EndForm();}

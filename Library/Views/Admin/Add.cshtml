@@ -1,0 +1,21 @@
+﻿@model Library.Models.Record
+@{
+    ViewBag.Title = "Добавить материал";
+}
+
+<h2>Создать новую книгу</h2>
+@{Html.BeginForm();}
+<div class="item">
+    <label>Id</label>
+    <input name="Id" value="@Model.RecordId" />
+</div>
+<div class="item">
+    <label>Название</label>
+    <input name="Name" value="@Model.RecordName" />
+</div>
+<div class="item">
+    <label>Описание</label>
+    <input name="Description" value="@Model.RecordDescription" />
+</div>
+<input type="submit" value="Отправить" />
+@{Html.EndForm();}
