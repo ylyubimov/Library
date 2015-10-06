@@ -33,12 +33,20 @@ namespace Library.Controllers
             record.RecordId = db.Records.Count();
             db.Records.Add(record);
             db.SaveChanges();
-            return Redirect("/Home/Index");
+
+            return Redirect("/Admin/Index");
         }
 
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit(int id)
         {
+            bool idIsValid = (from r in db.Records
+                            select r.RecordId).Contains(id);
+            if (!idIsValid)
+            {
+                return new HttpNotFoundResult();
+            }
+
             return View(new Record());
         }
 
@@ -51,7 +59,9 @@ namespace Library.Controllers
             query.RecordName = record.RecordName;
             query.RecordDescription = record.RecordDescription;
             db.SaveChanges();
-            return Redirect("/Home/Index");
+
+            return Redirect("/Admin/Index");
+
         }
     }
 }

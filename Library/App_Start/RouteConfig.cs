@@ -36,6 +36,12 @@ namespace Library
                url: "Admin/Edit/{id}", 
                defaults: new { controller = "Admin", action = "Edit"}
             );
+
+            routes.MapRoute(
+               name: "IndexAdmin",
+               url: "Admin",
+               defaults: new { controller = "Admin", action = "Index" }
+            );
         }
     }
 }
