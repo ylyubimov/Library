@@ -2,6 +2,7 @@
 /Library/obj
 /Library/bin
 /Library/*.user
+/*.mdf
 /*.suo
 .vs/
 /*.ldf
