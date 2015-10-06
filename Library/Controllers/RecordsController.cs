@@ -21,6 +21,10 @@ namespace Library.Controllers
                 Record a = new Record();
                 a.RecordName = i.ToString();
                 a.RecordId = i;
+                Publisher b = new Publisher();
+                b.PublisherName = i.ToString();
+                b.PublisherSurname = i.ToString();
+                a.Author = b;
                 db.Records.Add(a);
             }
             return View(db.Records.Local.ToList());
