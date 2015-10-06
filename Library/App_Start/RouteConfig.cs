@@ -34,7 +34,7 @@ namespace Library
             routes.MapRoute(
                name: "EditRecord",
                url: "Admin/Edit/{id}", 
-               defaults: new { controller = "Admin", action = "Edit" }
+               defaults: new { controller = "Admin", action = "Edit"}
             );
         }
     }

@@ -20,22 +20,38 @@ namespace Library.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Add()
+        {
+            return View(new Record());
+        }
+
+
         [HttpPost]
         public ActionResult Add(Record record)
-        {  
+        {
+            record.RecordId = db.Records.Count();
             db.Records.Add(record);
-            db.SaveChanges();    
-            return View(db); // ?
+            db.SaveChanges();
+            return Redirect("/Home/Index");
+        }
+
+        [HttpGet]
+        public ActionResult Edit()
+        {
+            return View(new Record());
         }
 
         [HttpPost]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, Record record)
         {
-            var query = from record in db.Records
-                        where record.RecordId == id
-                        select record;
-            // todo
-            return View();
+            var query = (from r in db.Records
+                            where r.RecordId == id
+                            select r).First();
+            query.RecordName = record.RecordName;
+            query.RecordDescription = record.RecordDescription;
+            db.SaveChanges();
+            return Redirect("/Home/Index");
         }
     }
 }
