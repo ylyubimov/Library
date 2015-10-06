@@ -12,37 +12,13 @@ namespace Library.Controllers
     {
         private LibraryContext db = new LibraryContext();
 
-        //
-        // GET: /Books/
         public ActionResult Index()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Record a = new Record();
-                a.RecordName = i.ToString();
-                a.RecordId = i;
-                Publisher b = new Publisher();
-                b.PublisherName = i.ToString();
-                b.PublisherSurname = i.ToString();
-                a.Author = b;
-                db.Records.Add(a);
-            }
-            return View(db.Records.Local.ToList());
+            return View(db.Records.ToList());
         }
 
         public ActionResult Record(int? id)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Record a = new Record();
-                a.RecordName = i.ToString();
-                a.RecordId = i;
-                db.Records.Add(a);
-            }
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Record b = db.Records.Find(id);
             if (b == null)
             {
@@ -50,5 +26,50 @@ namespace Library.Controllers
             }
            return View(b);
         }
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            return View(new Record());
+        }
+
+
+        [HttpPost]
+        public ActionResult Add(Record record)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                db.Records.Add(record);
+                db.SaveChanges();
+
+                return Redirect("/Record/Index");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                Record b = db.Records.Find(id);
+                return View(b);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, Record record)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                Record b = db.Records.Find(id);
+                b.RecordName = record.RecordName;
+                b.RecordDescription = record.RecordDescription;
+                db.SaveChanges();
+
+                return Redirect("/Record/Index");
+            }
+
+        }
+
     }
 }
