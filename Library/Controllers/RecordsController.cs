@@ -23,7 +23,6 @@ namespace Library.Controllers
                 a.RecordId = i;
                 Publisher b = new Publisher();
                 b.PublisherName = i.ToString();
-                b.PublisherSurname = i.ToString();
                 a.Author = b;
                 db.Records.Add(a);
             }

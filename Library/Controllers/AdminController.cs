@@ -34,7 +34,6 @@ namespace Library.Controllers
                 record.RecordId = db.Records.Count();
                 db.Records.Add(record);
                 db.SaveChanges();
-
                 return Redirect("/Admin/Index");
             }
         }
@@ -60,13 +59,20 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
-                var query = (from r in db.Records
+                var recordQuery = (from r in db.Records
                              where r.RecordId == id
                              select r).First();
-                query.RecordName = record.RecordName;
-                query.RecordDescription = record.RecordDescription;
+                recordQuery.RecordName = record.RecordName;
+                recordQuery.RecordDescription = record.RecordDescription;
+                int publisherId = record.Author.PublisherId + 1;
+                var publisherQuery = (from p in db.Publishers // TODO: here. нужно получить айди publishera
+                             where p.PublisherId == publisherId
+                             select p).First();
+                publisherQuery.PublisherName = record.Author.PublisherName;
+                publisherQuery.Address = record.Author.Address;
+                publisherQuery.Number = record.Author.Number;
+                publisherQuery.Email = record.Author.Email;
                 db.SaveChanges();
-
                 return Redirect("/Admin/Index");
             }
 
