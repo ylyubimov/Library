@@ -32,6 +32,9 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 record.RecordId = db.Records.Count();
+                record.PublisherId = db.Publishers.Count();
+                record.Author.PublisherId = record.PublisherId;
+                db.Publishers.Add(record.Author);
                 db.Records.Add(record);
                 db.SaveChanges();
                 return Redirect("/Admin/Index");
@@ -39,7 +42,7 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id) // Используется AdminViewModel
         {
             using (LibraryContext db = new LibraryContext())
             {
@@ -49,33 +52,35 @@ namespace Library.Controllers
                 {
                     return new HttpNotFoundResult();
                 }
-                var currentBook = (from r in db.Records where r.RecordId == id select r).First();
-                return View(currentBook);
+                Record currentBook = (from r in db.Records where r.RecordId == id select r).First();
+                Publisher currentPublisher = (from p in db.Publishers where p.PublisherId == currentBook.PublisherId select p).First();
+                AdminViewModel viewModel = new AdminViewModel(currentBook, currentPublisher);
+                return View(viewModel);
             }
-        }
+        } 
 
         [HttpPost]
-        public ActionResult Edit(int id, Record record)
+        public ActionResult Edit(int id, AdminViewModel viewModel)  // Используется AdminViewModel
         {
             using (LibraryContext db = new LibraryContext())
             {
                 var recordQuery = (from r in db.Records
                              where r.RecordId == id
                              select r).First();
-                recordQuery.RecordName = record.RecordName;
-                recordQuery.RecordDescription = record.RecordDescription;
-                int publisherId = record.Author.PublisherId + 1;
-                var publisherQuery = (from p in db.Publishers // TODO: here. нужно получить айди publishera
-                             where p.PublisherId == publisherId
-                             select p).First();
-                publisherQuery.PublisherName = record.Author.PublisherName;
-                publisherQuery.Address = record.Author.Address;
-                publisherQuery.Number = record.Author.Number;
-                publisherQuery.Email = record.Author.Email;
+                var publisherQuery = (from p in db.Publishers
+                                      where p.PublisherId == recordQuery.PublisherId
+                                      select p).First();
+                recordQuery.RecordName = viewModel.record.RecordName;
+                recordQuery.RecordDescription = viewModel.record.RecordDescription;
+                recordQuery.Author = viewModel.record.Author;
+                publisherQuery.PublisherName = viewModel.publisher.PublisherName;
+                publisherQuery.Address = viewModel.publisher.Address;
+                publisherQuery.Email = viewModel.publisher.Email;
+                publisherQuery.Number = viewModel.publisher.Number;
+                recordQuery.Author = publisherQuery;
                 db.SaveChanges();
                 return Redirect("/Admin/Index");
             }
-
         }
     }
 }

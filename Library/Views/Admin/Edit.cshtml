@@ -1,4 +1,4 @@
-﻿@model Library.Models.Record
+﻿@model Library.Models.AdminViewModel
 @{
     ViewBag.Title = "Изменить информацию о книге";
 }
@@ -8,27 +8,27 @@
 <fieldset>
     <div class="editor-field">
         <label>Название</label>
-        @Html.TextBoxFor(record => record.RecordName)
+        @Html.TextBoxFor(model => model.record.RecordName)
     </div>
     <div class="editor-field">
         <label>Описание</label>
-        @Html.TextBoxFor(record => record.RecordDescription)
+        @Html.TextBoxFor(model => model.record.RecordDescription)
     </div>
     <div class="editor-field">
         <label>Название издательства</label>
-        @Html.TextBoxFor(record => record.Author.PublisherName)
+        @Html.TextBoxFor(model => model.publisher.PublisherName)
     </div>
     <div class="editor-field">
         <label>Адрес издательства</label>
-        @Html.TextBoxFor(record => record.Author.Address)
+        @Html.TextBoxFor(model => model.publisher.Address)
     </div>
     <div class="editor-field">
         <label>Контактный телефон издательства</label>
-        @Html.TextBoxFor(record => record.Author.Number)
+        @Html.TextBoxFor(model => model.publisher.Number)
     </div>
     <div class="editor-field">
         <label>Email издательства</label>
-        @Html.TextBoxFor(record => record.Author.Email)
+        @Html.TextBoxFor(model => model.publisher.Email)
     </div>
     <input type="submit" value="Изменить" />
 </fieldset>
