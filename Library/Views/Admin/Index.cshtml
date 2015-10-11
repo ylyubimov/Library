@@ -1,2 +1,21 @@
-﻿<h2>Admin</h2>
+﻿
+@model Library.Models.Admin
+@{
+    ViewBag.Title = "Админ Админович";
+}
+
+<h2 align="center">Our Admin:</h2>
+@{Html.BeginForm();}
+<fieldset>
+    <div align="center">
+        <label>Имя</label>
+        @Html.TextBoxFor(model => model.Login)
+    </div>
+    <div align="center">
+        <label>Пароль</label>
+        @Html.TextBoxFor( model => model.Password)
+    </div>
+</fieldset>
+@{Html.EndForm();}
+
 
