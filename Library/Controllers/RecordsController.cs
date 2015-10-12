@@ -26,7 +26,7 @@ namespace Library.Controllers
                 a.Author = b;
                 db.Records.Add(a);
             }
-            return View(db.Records.Local.ToList());
+            return View(db.Records.ToList());
         }
 
         public ActionResult Record(int? id)
@@ -47,7 +47,7 @@ namespace Library.Controllers
             {
                 return HttpNotFound();
             }
-           return View(b);
+            return PartialView(b);
         }
     }
 }

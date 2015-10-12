@@ -70,3 +70,29 @@ filter: blur(0px);
 
 color: #000;
 }
+
+.modal-body {
+         width: 800px !important;
+         margin: 100px auto !important;
+         display: block;
+     }
+
+div.alert, div.alert-warning::before{
+    content:'';
+    display:block;
+    clear:both;
+
+}
+div.alert, div.alert-warning::after{
+    content:'';
+    display:block;
+    clear:both;
+
+}
+
+.modal-body h2 {
+    text-align:center;
+}S
+.modal-body h1 {
+    color: black;
+}
