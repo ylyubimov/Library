@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace Library.Models
 {
     public class Admin
     {
-        public string Id { get; set; }
+        [Key]
+        public int AdminId { get; set; }
 
         [Required]
         public string Login { get; set; }

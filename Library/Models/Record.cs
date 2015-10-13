@@ -10,6 +10,7 @@ namespace Library.Models
 {
     public class Record
     {
+        [Key]
         public int RecordId { get; set; }
 
         [Required]

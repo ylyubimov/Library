@@ -19,6 +19,24 @@ namespace Library
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+                name: "Login",
+                url: "Admin/Login",
+                defaults: new { controller = "Admin", action = "Login", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Add",
+                url: "Admin/Add",
+                defaults: new { controller = "Admin", action = "Add", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Edit",
+                url: "Admin/Edit/{id}",
+                defaults: new { controller = "Admin", action = "Edit", id = UrlParameter.Optional }
+            );
+
         }
     }
 }

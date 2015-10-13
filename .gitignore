@@ -4,3 +4,5 @@
 /Library/*.user
 /*.suo
 .vs/
+*.mdf
+*.ldf

@@ -6,6 +6,7 @@
 <h2>Создать новую книгу</h2>
 @{Html.BeginForm();}
 <fieldset>
+    @Html.ValidationSummary(true)
     <div class="editor-field">
         <label>Название</label>
         @Html.TextBoxFor(record => record.RecordName)

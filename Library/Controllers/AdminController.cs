@@ -8,22 +8,82 @@ using System.Text;
 using System.Threading.Tasks;
 using Library.Models;
 using System.Data.Entity.Validation;
+using System.Net;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Security;
 
 namespace Library.Controllers
 {
-    // TODO: [Authorize(Roles ="Admin")] - разобраться с Roles, Authorize
+    [Authorize]
     public class AdminController : Controller
     {
+        public AdminController()
+            : this(new UserManager<IdentityUser>(new UserStore<IdentityUser>(new LibraryContext())))
+        {
+        }
+
+        public AdminController(UserManager<IdentityUser> userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public UserManager<IdentityUser> UserManager { get; private set; }
 
         // GET: /Admin/
         public ActionResult Index()
         {   // Пока тут вывод информации об админе
-            using (var db = new LibraryContext()) {
+            using (var db = new LibraryContext())
+            {
                 var adminInfo = (from admin in db.LibraryAdmins
                                  select admin).First();
                 return View(adminInfo);
-            }            
+            }
         }
+
+        // ===============================================================================
+        // GET: /Admin/Login
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View(new Admin());
+        }
+
+        //
+        // POST: /Admin/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(Admin model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindAsync(model.Login, model.Password);
+                if (user != null)
+                {
+                    return RedirectToAction("Admin", "Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // POST: /Admin/LogOff
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("Records", "Index");
+        }
+      
+        // ==============================================================
 
         [HttpGet]
         public ActionResult Add()
@@ -35,27 +95,25 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Add(Record record)
         {
-            try {
+            if (ModelState.IsValid)
+            { 
                 using (LibraryContext db = new LibraryContext())
                 {
-                    record.RecordId = db.Records.Count();
-                    record.PublisherId = db.Publishers.Count();
-                    record.Author.PublisherId = record.PublisherId;
                     db.Publishers.Add(record.Author);
                     db.Records.Add(record);
                     db.SaveChanges();
                     return Redirect("/Admin/Index");
                 }
-            } catch (DbEntityValidationException e) // Отлавливается некорректно введенная форма
+            }
+            else
             {
-                var error = e.EntityValidationErrors.First().ValidationErrors.First();
-                this.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 return View(record);
             }
         }
 
         [HttpGet]
-        public ActionResult Edit(int id) // Используется AdminViewModel
+        public ActionResult Edit(int id) // Используется AdminViewModel 
+            //todo: сделать проверку, что id не строку передали
         {
             using (LibraryContext db = new LibraryContext())
             {
@@ -70,7 +128,7 @@ namespace Library.Controllers
                 AdminViewModel viewModel = new AdminViewModel(currentBook, currentPublisher);
                 return View(viewModel);
             }
-        } 
+        }
 
         private void ChangeEntities(Record record, Publisher publisher, AdminViewModel model)
         {
@@ -87,7 +145,8 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Edit(int id, AdminViewModel viewModel)  // Используется AdminViewModel
         {
-            try {
+            if (ModelState.IsValid)
+            {
                 using (LibraryContext db = new LibraryContext())
                 {
                     var recordQuery = (from r in db.Records
@@ -96,14 +155,13 @@ namespace Library.Controllers
                     var publisherQuery = (from p in db.Publishers
                                           where p.PublisherId == recordQuery.PublisherId
                                           select p).First();
-                    ChangeEntities(recordQuery, publisherQuery, viewModel);           
+                    ChangeEntities(recordQuery, publisherQuery, viewModel);
                     db.SaveChanges();
                     return Redirect("/Admin/Index");
                 }
-            } catch (DbEntityValidationException e)
+            }
+            else
             {
-                var error = e.EntityValidationErrors.First().ValidationErrors.First();
-                this.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 return View(viewModel);
             }
         }
