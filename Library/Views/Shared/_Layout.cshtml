@@ -37,15 +37,16 @@
                 <a class="navbar-brand" href="/">Library</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                <form class="navbar-form navbar-right">
+                @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "navbar-form navbar-right" });}
                     <div class="form-group">
-                        <input type="text" placeholder="" class="form-control">
+                        @Html.TextBox("find")  
                     </div>
                     <button type="submit" class="btn btn-success">Find</button>
-                </form>
+                @{Html.EndForm();}
             </div><!--/.navbar-collapse -->
         </div>
     </nav>
+
 
 
 

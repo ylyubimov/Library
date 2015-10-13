@@ -14,7 +14,15 @@ namespace Library.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Records.ToList());
+            String a = Request["find"];
+            if (!String.IsNullOrEmpty(Request["find"]))
+            {
+                return View(db.Records.Where(s => s.RecordName!=null && s.RecordName.Contains(a)).ToList());
+            }
+            else
+            {
+                return View(db.Records.ToList());
+            }
         }
 
         public ActionResult Record(int? id)
@@ -59,11 +67,6 @@ namespace Library.Controllers
         {
             Record b = db.Records.Find(id);
             return File("../../Data/"+b.RecordName+".pdf", "application/pdf");
-        }
-
-        public ActionResult Find()
-        {
-            return Redirect("/Records/Index"); 
         }
 
         [HttpGet]
