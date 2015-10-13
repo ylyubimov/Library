@@ -9,7 +9,9 @@ namespace Library.Models
     {
         public int PublisherId { get; set; }
         public string PublisherName { get; set; }
-        public string PublisherSurname { get; set; }   
-        public List<Record> Records { get; set; }
+        public string Address { get; set; }
+        public string Number { get; set; }   
+        public string Email { get; set;}
+        // public List<Record> Records { get; set; }
     }
 }

@@ -23,7 +23,6 @@
                 <p><h5>@Html.DisplayFor(modelItem => item.RecordName)</h5></p>
                 <h3>Издательство:</h3>
                 <h3>@Html.DisplayFor(modelItem => item.Author.PublisherName)</h3>
-                <h3>@Html.DisplayFor(modelItem => item.Author.PublisherSurname)</h3>
                 @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" }) 
             </div>
         }

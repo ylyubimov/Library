@@ -2,7 +2,7 @@
 /Library/obj
 /Library/bin
 /Library/*.user
-/*.mdf
+*.mdf
 /*.suo
 .vs/
-/*.ldf
+*.ldf
