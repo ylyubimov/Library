@@ -5,7 +5,7 @@
         <hr />
         <dl class="dl-horizontal">
                <h5>@Html.DisplayFor(model => model.RecordName)</h5>
-   
+            @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
         </dl>
     </div>
 

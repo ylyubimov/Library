@@ -35,15 +35,31 @@ namespace Library.Controllers
 
 
         [HttpPost]
-        public ActionResult Add(Record record)
+        public ActionResult Add(Record record, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
             {
                 db.Records.Add(record);
                 db.SaveChanges();
-
-                return Redirect("/Record/Index");
             }
+            foreach (var file in fileUpload)
+            {
+                if (file == null) continue;
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
+                file.SaveAs(System.IO.Path.Combine(path, record.RecordName));
+            }
+            return Redirect("/Records/Index");
+        }
+
+        public FileResult downloadFile(int? id)
+        {
+            Record b = db.Records.Find(id);
+            return File("../../Data/"+b.RecordName+".pdf", "application/pdf");
+        }
+
+        public ActionResult Find()
+        {
+            return Redirect("/Records/Index"); 
         }
 
         [HttpGet]
