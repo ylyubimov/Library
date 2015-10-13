@@ -39,6 +39,10 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
+                record.RecordId = db.Records.Count();
+                record.PublisherId = db.Publishers.Count();
+                record.Author.PublisherId = record.PublisherId;
+                db.Publishers.Add(record.Author);
                 db.Records.Add(record);
                 db.SaveChanges();
             }
@@ -46,7 +50,7 @@ namespace Library.Controllers
             {
                 if (file == null) continue;
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
-                file.SaveAs(System.IO.Path.Combine(path, record.RecordName));
+                file.SaveAs(System.IO.Path.Combine(path, record.RecordName+".pdf"));
             }
             return Redirect("/Records/Index");
         }
