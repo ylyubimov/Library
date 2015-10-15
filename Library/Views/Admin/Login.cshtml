@@ -1,4 +1,4 @@
-﻿@model Library.Models.Admin
+﻿@model Library.Models.AdminLoginModel
 @{
     ViewBag.Title = "ВОЙДИТЕ";
 }
@@ -7,6 +7,7 @@
 @{Html.BeginForm();}
 <fieldset>
     @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
     <div class="editor-field">
         <label>Логин</label>
         @Html.TextBoxFor(admin => admin.Login)
@@ -16,6 +17,11 @@
         <label>Пароль</label>
         @Html.TextBoxFor(admin => admin.Password)
         @Html.ValidationMessageFor(admin => admin.Password)
+    </div>   
+    <div class="editor-field">
+        <label>Запомнить</label>
+        @Html.CheckBoxFor(admin => admin.RememberMe)
+        @Html.ValidationMessageFor(admin => admin.RememberMe)
     </div>   
     <input type="submit" value="GO ON" />
 </fieldset>

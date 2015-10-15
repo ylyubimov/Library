@@ -5,11 +5,11 @@ using System.Web;
 
 namespace Library.Models
 {
-    public class AdminViewModel
+    public class AdminEditModel
     {
-        public AdminViewModel() { }
+        public AdminEditModel() { }
 
-        public AdminViewModel(Record newRecord, Publisher newPublisher) {
+        public AdminEditModel(Record newRecord, Publisher newPublisher) {
             publisher = newPublisher;
             record = newRecord;
         }

@@ -8,7 +8,7 @@ namespace Library
     public class Startup
     {
         public void ConfigureAuth(IAppBuilder app)
-        {
+        { // todo: не заходит сюда!!! см portal
             // Enable the application to use a cookie to store information for the signed in user
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

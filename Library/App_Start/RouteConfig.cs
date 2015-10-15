@@ -22,13 +22,13 @@ namespace Library
             routes.MapRoute(
                 name: "Login",
                 url: "Admin/Login",
-                defaults: new { controller = "Admin", action = "Login", id = UrlParameter.Optional }
+                defaults: new { controller = "Admin", action = "Login" }
             );
 
             routes.MapRoute(
                 name: "Add",
                 url: "Admin/Add",
-                defaults: new { controller = "Admin", action = "Add", id = UrlParameter.Optional }
+                defaults: new { controller = "Admin", action = "Add" }
             );
 
             routes.MapRoute(

@@ -12,23 +12,20 @@ using System.Net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Security;
+using Microsoft.Owin.Security;
 
 namespace Library.Controllers
 {
-    [Authorize]
+    // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
     public class AdminController : Controller
     {
         public AdminController()
-            : this(new UserManager<IdentityUser>(new UserStore<IdentityUser>(new LibraryContext())))
         {
+            IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
+            UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
         }
 
-        public AdminController(UserManager<IdentityUser> userManager)
-        {
-            UserManager = userManager;
-        }
-
-        public UserManager<IdentityUser> UserManager { get; private set; }
+        public UserManager<IdentityUser> UserManager { get; private set; } 
 
         // GET: /Admin/
         public ActionResult Index()
@@ -44,9 +41,9 @@ namespace Library.Controllers
         // ===============================================================================
         // GET: /Admin/Login
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login() 
         {
-            return View(new Admin());
+            return View(new AdminLoginModel());
         }
 
         //
@@ -54,13 +51,14 @@ namespace Library.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(Admin model)
+        public async Task<ActionResult> Login(AdminLoginModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);
                 if (user != null)
                 {
+                    await SignInAsync(user, model.RememberMe);
                     return RedirectToAction("Admin", "Index");
                 }
                 else
@@ -73,6 +71,13 @@ namespace Library.Controllers
             return View(model);
         }
 
+        private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
+
         //
         // POST: /Admin/LogOff
         [HttpPost]
@@ -82,7 +87,7 @@ namespace Library.Controllers
             HttpContext.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("Records", "Index");
         }
-      
+
         // ==============================================================
 
         [HttpGet]
@@ -92,13 +97,32 @@ namespace Library.Controllers
         }
 
 
+        private void AddErrorsProcessing(Record record)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                if (db.Records.Where(rec => rec.RecordName == record.RecordName).Count() > 0)
+                {
+                    ModelState.AddModelError("RecordName", "Книга с таким названием уже существует");
+                }
+
+                // todo: проверка ниже нужна для будущего выпадающего списка: чтобы не создать нового publishera, если он существует
+                if (db.Publishers.Where(rec => rec.PublisherName == record.Author.PublisherName).Count() > 0)
+                {
+                    ModelState.AddModelError("Author.PublisherName", "Издатель с таким названием уже существует");
+                }
+            }
+        }
+
         [HttpPost]
         public ActionResult Add(Record record)
-        {
+        { 
+            AddErrorsProcessing(record);
+
             if (ModelState.IsValid)
-            { 
+            {
                 using (LibraryContext db = new LibraryContext())
-                {
+                {           
                     db.Publishers.Add(record.Author);
                     db.Records.Add(record);
                     db.SaveChanges();
@@ -112,25 +136,33 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id) // Используется AdminViewModel 
-            //todo: сделать проверку, что id не строку передали
+        public ActionResult Edit(int? id)
         {
+            int realId;
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(400, "Expected books id");
+            }
+            else
+            {
+                realId = (int)id;
+            }
             using (LibraryContext db = new LibraryContext())
             {
                 bool idIsValid = (from r in db.Records
-                                  select r.RecordId).Contains(id);
+                                  select r.RecordId).Contains(realId);
                 if (!idIsValid)
                 {
-                    return new HttpNotFoundResult();
+                    return new HttpStatusCodeResult(404, "No book with such id: " + realId);
                 }
-                Record currentBook = (from r in db.Records where r.RecordId == id select r).First();
+                Record currentBook = (from r in db.Records where r.RecordId == realId select r).First();
                 Publisher currentPublisher = (from p in db.Publishers where p.PublisherId == currentBook.PublisherId select p).First();
-                AdminViewModel viewModel = new AdminViewModel(currentBook, currentPublisher);
+                AdminEditModel viewModel = new AdminEditModel(currentBook, currentPublisher);
                 return View(viewModel);
             }
         }
 
-        private void ChangeEntities(Record record, Publisher publisher, AdminViewModel model)
+        private void ChangeEntities(Record record, Publisher publisher, AdminEditModel model)
         {
             record.RecordName = model.record.RecordName;
             record.RecordDescription = model.record.RecordDescription;
@@ -143,7 +175,7 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, AdminViewModel viewModel)  // Используется AdminViewModel
+        public ActionResult Edit(int id, AdminEditModel viewModel)
         {
             if (ModelState.IsValid)
             {

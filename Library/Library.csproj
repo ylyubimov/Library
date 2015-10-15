@@ -173,8 +173,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\Admin.cs" />
+    <Compile Include="Models\AdminEditModel.cs" />
+    <Compile Include="Models\AdminLoginModel.cs" />
     <Compile Include="Models\LibraryContext.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\Record.cs" />
