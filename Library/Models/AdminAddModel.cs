@@ -21,8 +21,6 @@ namespace Library.Models
 
         public int PublisherId { get; set; }
         public Record Record { get; set; }
-
-        [DisplayName("Publishers")]
         public List<SelectListItem> Publishers { get; set; }
     }
 }

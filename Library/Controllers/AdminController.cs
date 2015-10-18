@@ -25,7 +25,7 @@ namespace Library.Controllers
             UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
         }
 
-        public UserManager<IdentityUser> UserManager { get; private set; } 
+        public UserManager<IdentityUser> UserManager { get; private set; }
 
         // GET: /Admin/
         public ActionResult Index()
@@ -41,7 +41,7 @@ namespace Library.Controllers
         // ===============================================================================
         // GET: /Admin/Login
         [AllowAnonymous]
-        public ActionResult Login() 
+        public ActionResult Login()
         {
             return View(new AdminLoginModel());
         }
@@ -90,73 +90,84 @@ namespace Library.Controllers
 
         // ==============================================================
 
-        [HttpGet]
-        public ActionResult Ddl()
+        private void CreateModel(AdminAddModel model)
         {
-            using (LibraryContext db = new LibraryContext()) {
-                AdminAddModel model = new AdminAddModel();
+            using (LibraryContext db = new LibraryContext())
+            {
                 model.Record = new Record();
                 var query = from p in db.Publishers orderby p.PublisherName select p;
                 foreach (var q in query)
                 {
-                    model.Publishers.Add(new SelectListItem { Text = q.PublisherName, Value = q.PublisherId.ToString() });
+                    model.Publishers.Add(new SelectListItem { Text = q.PublisherName, Value = (q.PublisherId + 1).ToString() });
+                    // для борьбы с 0-когда ничего не выбрали?
                 }
-                return View(model);
             }
         }
 
-        [HttpPost]
-        public ActionResult Ddl(AdminAddModel model)
-        {
-            if (model.PublisherId != 0) // Воспользовались списком
-            {
-                //todo: чекнуть поля Record (не Publisher) на валидность
-            }
-            if (ModelState.IsValid) { 
-                int i = 100500;
-                // todo: saving
-                return Redirect("/Admin/Index");
-            } else
-            {
-                return View(model);
-            }
-        }
-
-        private void AddErrorsProcessing(Record record)
+        [HttpGet]
+        public ActionResult Add()
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (db.Records.Where(rec => rec.RecordName == record.RecordName).Count() > 0)
-                {
-                    ModelState.AddModelError("RecordName", "Книга с таким названием уже существует");
-                }
-
-                // todo: проверка ниже нужна для будущего выпадающего списка: чтобы не создать нового publishera, если он существует
-                if (db.Publishers.Where(rec => rec.PublisherName == record.Author.PublisherName).Count() > 0)
-                {
-                    ModelState.AddModelError("Author.PublisherName", "Издатель с таким названием уже существует");
-                }
+                AdminAddModel model = new AdminAddModel();
+                CreateModel(model);
+                return View(model);
             }
         }
 
         [HttpPost]
-        public ActionResult Add(Record record)
-        { 
-           // AddErrorsProcessing(record);
+        public ActionResult Add(AdminAddModel model)
+        {
+            using (LibraryContext db = new LibraryContext()) // Уникальность книги
+            {
+                if (db.Records.Where(rec => rec.RecordName == model.Record.RecordName).Count() > 0)
+                {
+                    ModelState.AddModelError("Record.RecordName", "Книга с таким названием уже существует");
+                }
+            }
 
-            if (ModelState.IsValid)
+            if (model.PublisherId != 0) // Воспользовались списком
+            {
+                if (ModelState.IsValidField("Record.RecordName") && ModelState.IsValidField("Record.RecordDiscription"))
+                {
+                    using (LibraryContext db = new LibraryContext())
+                    {
+                        int realPublisherId = model.PublisherId - 1;
+                        model.Record.Author = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                        db.Records.Add(model.Record);
+                        db.SaveChanges();
+                        return Redirect("/Admin/Index");
+                    }
+                }
+                else
+                {
+                    CreateModel(model);
+                    return View(model);
+                }
+            }
+
+            using (LibraryContext db = new LibraryContext())  // Уникальность publisher'a
+            {
+                if (db.Publishers.Where(rec => rec.PublisherName == model.Record.Author.PublisherName).Count() > 0)
+                {
+                    ModelState.AddModelError("Record.Author.PublisherName", "Издатель с таким названием уже существует");
+                }
+            }
+            if (ModelState.IsValid) // С созданием нового publisher'a
             {
                 using (LibraryContext db = new LibraryContext())
-                {           
-                    db.Publishers.Add(record.Author);
-                    db.Records.Add(record);
+                {
+                    db.Publishers.Add(model.Record.Author);
+                    db.Records.Add(model.Record);
                     db.SaveChanges();
                     return Redirect("/Admin/Index");
                 }
             }
             else
             {
-                return View(record);
+                // todo: когда добавляем нового publishera не валидная модель. почему?
+                CreateModel(model);
+                return View(model);
             }
         }
 
