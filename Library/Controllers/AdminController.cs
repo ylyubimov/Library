@@ -91,11 +91,36 @@ namespace Library.Controllers
         // ==============================================================
 
         [HttpGet]
-        public ActionResult Add()
+        public ActionResult Ddl()
         {
-            return View(new Record());
+            using (LibraryContext db = new LibraryContext()) {
+                AdminAddModel model = new AdminAddModel();
+                model.Record = new Record();
+                var query = from p in db.Publishers orderby p.PublisherName select p;
+                foreach (var q in query)
+                {
+                    model.Publishers.Add(new SelectListItem { Text = q.PublisherName, Value = q.PublisherId.ToString() });
+                }
+                return View(model);
+            }
         }
 
+        [HttpPost]
+        public ActionResult Ddl(AdminAddModel model)
+        {
+            if (model.PublisherId != 0) // Воспользовались списком
+            {
+                //todo: чекнуть поля Record (не Publisher) на валидность
+            }
+            if (ModelState.IsValid) { 
+                int i = 100500;
+                // todo: saving
+                return Redirect("/Admin/Index");
+            } else
+            {
+                return View(model);
+            }
+        }
 
         private void AddErrorsProcessing(Record record)
         {
@@ -117,7 +142,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Add(Record record)
         { 
-            AddErrorsProcessing(record);
+           // AddErrorsProcessing(record);
 
             if (ModelState.IsValid)
             {
@@ -177,6 +202,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Edit(int id, AdminEditModel viewModel)
         {
+            // todo: написать валидацию совпадающих книг и имен publisher ов
             if (ModelState.IsValid)
             {
                 using (LibraryContext db = new LibraryContext())
