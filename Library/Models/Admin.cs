@@ -1,21 +1,39 @@
-﻿using System;
+﻿using System.Data.Entity;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
+
 namespace Library.Models
 {
-    public class Admin
+    // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+    public class Admin : IdentityUser
     {
-        [Key]
-        public int AdminId { get; set; }
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<Admin> manager)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Add custom user claims here
+            return userIdentity;
+        }
+    }
 
-        [Required]
-        public string Login { get; set; }
+    public class ApplicationDbContext : IdentityDbContext<Admin>
+    {
+        public ApplicationDbContext()
+            : base("DefaultConnection", throwIfV1Schema: false)
+        {
+        }
 
-        [Required]
-        [MinLength(6, ErrorMessage = "Пароль должен быть длиннее 6 символов.")]
-        public string Password { get; set; }
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
     }
 }

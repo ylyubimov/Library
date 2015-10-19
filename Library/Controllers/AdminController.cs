@@ -1,33 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
-using System.Text;
-using System.Threading.Tasks;
-using Library.Models;
-using System.Data.Entity.Validation;
-using System.Net;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Web.Security;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Library.Models;
 
 namespace Library.Controllers
 {
     // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
     public class AdminController : Controller
     {
-        public AdminController()
-        {
-            IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
-            UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
-        }
+        ////public AdminController()
+        ////{
+        ////    IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
+        ////    adminManager = new adminManager<IdentityUser>(new UserStore<IdentityUser>(db));
+        ////}
 
-        public UserManager<IdentityUser> UserManager { get; private set; } 
+        ////public adminManager<IdentityUser> adminManager { get; private set; } 
 
-        // GET: /Admin/
+
+        //public AdminController()
+        //    : this(new adminManager<IdentityUser>(new UserStore<IdentityUser>(new MyDbContext())))
+        //{
+        //}
+
+        //public AdminController(adminManager<IdentityUser> adminManager)
+        //{
+        //    adminManager = adminManager;
+        //}
+
+        //public adminManager<IdentityUser> adminManager { get; private set; }
+        //// GET: /Admin/
         public ActionResult Index()
         {   // Пока тут вывод информации об админе
             using (var db = new LibraryContext())
@@ -38,45 +46,123 @@ namespace Library.Controllers
             }
         }
 
-        // ===============================================================================
-        // GET: /Admin/Login
-        [AllowAnonymous]
-        public ActionResult Login() 
+        //// ===============================================================================
+        //// GET: /Admin/Login
+        //[AllowAnonymous]
+        //public ActionResult Login() 
+        //{
+        //    return View(new AdminLoginModel());
+        //}
+
+        ////
+        //// POST: /Admin/Login
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(AdminLoginModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await adminManager.FindAsync(model.Login, model.Password);
+        //        if (user != null)
+        //        {
+        //            await SignInAsync(user, model.RememberMe);
+        //            return RedirectToAction("Admin", "Index");
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("", "Invalid username or password.");
+        //        }
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+
+        private AdminSignInManager _signInManager;
+        private AdminManager _userManager;
+
+        public AdminController()
         {
-            return View(new AdminLoginModel());
+        }
+
+        public AdminController(AdminManager userManager, AdminSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+
+        public AdminSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<AdminSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
+        public AdminManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<AdminManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
         }
 
         //
-        // POST: /Admin/Login
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        //
+        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AdminLoginModel model)
+        public async Task<ActionResult> Login(AdminLoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.Login, model.Password);
-                if (user != null)
-                {
-                    await SignInAsync(user, model.RememberMe);
-                    return RedirectToAction("Admin", "Index");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid username or password.");
-                }
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
         }
 
-        private async Task SignInAsync(IdentityUser user, bool isPersistent)
-        {
-            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-        }
+
+        //private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        //{
+        //    HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+        //    var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+        //    HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        //}
 
         //
         // POST: /Admin/LogOff
@@ -160,6 +246,15 @@ namespace Library.Controllers
                 AdminEditModel viewModel = new AdminEditModel(currentBook, currentPublisher);
                 return View(viewModel);
             }
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Admin");
         }
 
         private void ChangeEntities(Record record, Publisher publisher, AdminEditModel model)
