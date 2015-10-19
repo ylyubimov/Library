@@ -105,6 +105,13 @@ namespace Library.Controllers
             }
         }
 
+        private void EditRecord(Record record, string name, string description, Publisher publisher)
+        {
+            record.RecordName = name;
+            record.RecordDescription = description;
+            record.Author = publisher;
+        }
+
         private ActionResult WriteToDataBaseRecordAndPublisher(int id, AdminAddEditModel model, bool add)
         {
             bool edit = !add;
@@ -130,10 +137,8 @@ namespace Library.Controllers
                             var recordQuery = (from r in db.Records
                                                where r.RecordId == id
                                                select r).First();
-                            // todo: make function of this block
-                            recordQuery.RecordName = model.Record.RecordName;
-                            recordQuery.RecordDescription = model.Record.RecordDescription;
-                            recordQuery.Author = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                            Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                            EditRecord(recordQuery, model.Record.RecordName, model.Record.RecordDescription, publisher);
                         }
                         else
                         {
@@ -159,7 +164,6 @@ namespace Library.Controllers
                     ModelState.AddModelError("Record.Author.PublisherName", "Издатель с таким названием уже существует");
                 }
             }
-
             if (ModelState.IsValid) // С созданием нового publisher'a
             {
                 using (LibraryContext db = new LibraryContext())
@@ -169,9 +173,7 @@ namespace Library.Controllers
                         var recordQuery = (from r in db.Records
                                            where r.RecordId == id
                                            select r).First();
-                        recordQuery.RecordName = model.Record.RecordName;
-                        recordQuery.RecordDescription = model.Record.RecordDescription;
-                        recordQuery.Author = model.Record.Author;
+                        EditRecord(recordQuery, model.Record.RecordName, model.Record.RecordDescription, model.Record.Author);
                     }
                     else
                     {
