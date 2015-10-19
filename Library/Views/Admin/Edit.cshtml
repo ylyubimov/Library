@@ -1,45 +1,50 @@
-﻿@model Library.Models.AdminEditModel
+﻿@model Library.Models.AdminAddEditModel
 @{
-    ViewBag.Title = "Изменить информацию о книге";
+    ViewBag.Title = "Изменить материал";
 }
 
 <h2>Изменить данные о книге</h2>
 @{Html.BeginForm();}
 <fieldset>
+    @Html.ValidationSummary(true)
     <div class="editor-field">
         <label>Название</label>
-        @Html.TextBoxFor(model => model.record.RecordName)
-        @Html.ValidationMessageFor(model => model.record.RecordName)
+        @Html.TextBoxFor(model => model.Record.RecordName)
+        @Html.ValidationMessageFor(model => model.Record.RecordName)
     </div>
     <div class="editor-field">
         <label>Описание</label>
-        @Html.TextBoxFor(model => model.record.RecordDescription)
-        @Html.ValidationMessageFor(model => model.record.RecordDescription)
-        
+        @Html.TextBoxFor(model => model.Record.RecordDescription)
+        @Html.ValidationMessageFor(model => model.Record.RecordDescription)
+    </div>
+    <div>
+        <label>Издательство</label>
+        @Html.DropDownListFor(model => model.PublisherId, Model.Publishers, "Новое издательство:")
+        @Html.ValidationMessageFor(model => Model.Publishers)
+    </div>
+    <div>
+        <h5>Добавить новое издательство</h5>
     </div>
     <div class="editor-field">
         <label>Название издательства</label>
-        @Html.TextBoxFor(model => model.publisher.PublisherName)
-        @Html.ValidationMessageFor(model => model.publisher.PublisherName)
-        
+        @Html.TextBoxFor(model => model.Record.Author.PublisherName)
+        @Html.ValidationMessageFor(model => model.Record.Author.PublisherName)
     </div>
     <div class="editor-field">
         <label>Адрес издательства</label>
-        @Html.TextBoxFor(model => model.publisher.Address)
-        @Html.ValidationMessageFor(model => model.publisher.Address)
-        
+        @Html.TextBoxFor(model => model.Record.Author.Address)
+        @Html.ValidationMessageFor(model => model.Record.Author.Address)
     </div>
     <div class="editor-field">
         <label>Контактный телефон издательства</label>
-        @Html.TextBoxFor(model => model.publisher.Number)
-        @Html.ValidationMessageFor(model => model.publisher.Number)
-        
+        @Html.TextBoxFor(model => model.Record.Author.Number)
+        @Html.ValidationMessageFor(model => model.Record.Author.Number)
     </div>
     <div class="editor-field">
         <label>Email издательства</label>
-        @Html.TextBoxFor(model => model.publisher.Email)
-        @Html.ValidationMessageFor(model => model.publisher.Email)
+        @Html.TextBoxFor(model => model.Record.Author.Email)
+        @Html.ValidationMessageFor(model => model.Record.Author.Email)
     </div>
-    <input type="submit" value="Изменить" />
+    <input type="submit" value="Добавить" />
 </fieldset>
 @{Html.EndForm();}

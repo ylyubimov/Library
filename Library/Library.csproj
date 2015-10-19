@@ -176,8 +176,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
-    <Compile Include="Models\AdminAddModel.cs" />
-    <Compile Include="Models\AdminEditModel.cs" />
+    <Compile Include="Models\AdminAddEditModel.cs" />
     <Compile Include="Models\AdminLoginModel.cs" />
     <Compile Include="Models\LibraryContext.cs" />
     <Compile Include="Models\Publisher.cs" />

@@ -90,42 +90,34 @@ namespace Library.Controllers
 
         // ==============================================================
 
-        private void CreateModel(AdminAddModel model)
+        private List<SelectListItem> GetPublishersList()
         {
+            List<SelectListItem> publishers = new List<SelectListItem>();
             using (LibraryContext db = new LibraryContext())
             {
-                model.Record = new Record();
                 var query = from p in db.Publishers orderby p.PublisherName select p;
                 foreach (var q in query)
                 {
-                    model.Publishers.Add(new SelectListItem { Text = q.PublisherName, Value = (q.PublisherId + 1).ToString() });
-                    // для борьбы с 0-когда ничего не выбрали?
+                    publishers.Add(new SelectListItem { Text = q.PublisherName, Value = (q.PublisherId + 1).ToString() });
+                    // для борьбы с 0-когда ничего не выбрали
                 }
+                return publishers;
             }
         }
 
-        [HttpGet]
-        public ActionResult Add()
+        private ActionResult WriteToDataBaseRecordAndPublisher(int id, AdminAddEditModel model, bool add)
         {
-            using (LibraryContext db = new LibraryContext())
+            bool edit = !add;
+            using (LibraryContext db = new LibraryContext()) // Валидация книги
             {
-                AdminAddModel model = new AdminAddModel();
-                CreateModel(model);
-                return View(model);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Add(AdminAddModel model)
-        {
-            using (LibraryContext db = new LibraryContext()) // Уникальность книги
-            {
-                if (db.Records.Where(rec => rec.RecordName == model.Record.RecordName).Count() > 0)
+                if ((db.Records.Where(rec => rec.RecordName == model.Record.RecordName).Count() > 0 && add)
+                    || (!(db.Records.Where(rec => (rec.RecordName == model.Record.RecordName) && (rec.RecordId == id)).Count() > 0
+                        || db.Records.Where(rec => (rec.RecordName == model.Record.RecordName)).Count() == 0)
+                        && edit))
                 {
                     ModelState.AddModelError("Record.RecordName", "Книга с таким названием уже существует");
-                }
+                } // верная валидация = то же самое имя(его можно) || нет других имен из БД publishers
             }
-
             if (model.PublisherId != 0) // Воспользовались списком
             {
                 if (ModelState.IsValidField("Record.RecordName") && ModelState.IsValidField("Record.RecordDiscription"))
@@ -133,42 +125,83 @@ namespace Library.Controllers
                     using (LibraryContext db = new LibraryContext())
                     {
                         int realPublisherId = model.PublisherId - 1;
-                        model.Record.Author = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
-                        db.Records.Add(model.Record);
+                        if (edit)
+                        {
+                            var recordQuery = (from r in db.Records
+                                               where r.RecordId == id
+                                               select r).First();
+                            // todo: make function of this block
+                            recordQuery.RecordName = model.Record.RecordName;
+                            recordQuery.RecordDescription = model.Record.RecordDescription;
+                            recordQuery.Author = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                        }
+                        else
+                        {
+                            model.Record.Author = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                            db.Records.Add(model.Record);
+                        }
                         db.SaveChanges();
                         return Redirect("/Admin/Index");
                     }
                 }
                 else
                 {
-                    CreateModel(model);
+                    model.Publishers = GetPublishersList();
                     return View(model);
                 }
             }
 
-            using (LibraryContext db = new LibraryContext())  // Уникальность publisher'a
+            ModelState["PublisherId"].Errors.Clear(); // Игнорирования  [required] PublishersId в форме
+            using (LibraryContext db = new LibraryContext())  // Валидация создаваемого издательства
             {
                 if (db.Publishers.Where(rec => rec.PublisherName == model.Record.Author.PublisherName).Count() > 0)
                 {
                     ModelState.AddModelError("Record.Author.PublisherName", "Издатель с таким названием уже существует");
                 }
             }
+
             if (ModelState.IsValid) // С созданием нового publisher'a
             {
                 using (LibraryContext db = new LibraryContext())
                 {
+                    if (edit)
+                    {
+                        var recordQuery = (from r in db.Records
+                                           where r.RecordId == id
+                                           select r).First();
+                        recordQuery.RecordName = model.Record.RecordName;
+                        recordQuery.RecordDescription = model.Record.RecordDescription;
+                        recordQuery.Author = model.Record.Author;
+                    }
+                    else
+                    {
+                        db.Records.Add(model.Record);
+                    }
                     db.Publishers.Add(model.Record.Author);
-                    db.Records.Add(model.Record);
                     db.SaveChanges();
                     return Redirect("/Admin/Index");
                 }
             }
             else
             {
-                // todo: когда добавляем нового publishera не валидная модель. почему?
-                CreateModel(model);
+                model.Publishers = GetPublishersList();
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            AdminAddEditModel model = new AdminAddEditModel();
+            model.Publishers = GetPublishersList();
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult Add(AdminAddEditModel model)
+        {
+            return WriteToDataBaseRecordAndPublisher(0, model, true);
         }
 
         [HttpGet]
@@ -191,48 +224,19 @@ namespace Library.Controllers
                 {
                     return new HttpStatusCodeResult(404, "No book with such id: " + realId);
                 }
-                Record currentBook = (from r in db.Records where r.RecordId == realId select r).First();
-                Publisher currentPublisher = (from p in db.Publishers where p.PublisherId == currentBook.PublisherId select p).First();
-                AdminEditModel viewModel = new AdminEditModel(currentBook, currentPublisher);
-                return View(viewModel);
+                AdminAddEditModel model = new AdminAddEditModel();
+                model.Publishers = GetPublishersList();
+                model.Record = (from r in db.Records where r.RecordId == realId select r).First();
+                model.Record.Author = new Publisher();
+                model.PublisherId = model.Record.PublisherId + 1;
+                return View(model);
             }
-        }
-
-        private void ChangeEntities(Record record, Publisher publisher, AdminEditModel model)
-        {
-            record.RecordName = model.record.RecordName;
-            record.RecordDescription = model.record.RecordDescription;
-            record.Author = model.record.Author;
-            publisher.PublisherName = model.publisher.PublisherName;
-            publisher.Address = model.publisher.Address;
-            publisher.Email = model.publisher.Email;
-            publisher.Number = model.publisher.Number;
-            record.Author = publisher;
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, AdminEditModel viewModel)
+        public ActionResult Edit(int id, AdminAddEditModel model)
         {
-            // todo: написать валидацию совпадающих книг и имен publisher ов
-            if (ModelState.IsValid)
-            {
-                using (LibraryContext db = new LibraryContext())
-                {
-                    var recordQuery = (from r in db.Records
-                                       where r.RecordId == id
-                                       select r).First();
-                    var publisherQuery = (from p in db.Publishers
-                                          where p.PublisherId == recordQuery.PublisherId
-                                          select p).First();
-                    ChangeEntities(recordQuery, publisherQuery, viewModel);
-                    db.SaveChanges();
-                    return Redirect("/Admin/Index");
-                }
-            }
-            else
-            {
-                return View(viewModel);
-            }
+            return WriteToDataBaseRecordAndPublisher(id, model, false);
         }
     }
 }

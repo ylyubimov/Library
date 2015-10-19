@@ -7,16 +7,12 @@ using System.Web.Mvc;
 
 namespace Library.Models
 {
-    public class AdminAddModel
+    public class AdminAddEditModel
     {
-        public AdminAddModel()
+        public AdminAddEditModel()
         {
             Publishers = new List<SelectListItem>();
-        }
-
-        public AdminAddModel(List<SelectListItem> publishers)
-        {
-            Publishers = publishers;
+            Record = new Record();
         }
 
         public int PublisherId { get; set; }

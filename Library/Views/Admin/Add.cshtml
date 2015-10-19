@@ -1,4 +1,4 @@
-﻿@model Library.Models.AdminAddModel
+﻿@model Library.Models.AdminAddEditModel
 @{
     ViewBag.Title = "Добавить материал";
 }
@@ -19,7 +19,7 @@
     </div>
     <div>
         <label>Издательство</label>
-        @Html.DropDownListFor(model => model.PublisherId, Model.Publishers, "Выберите издательство")
+        @Html.DropDownListFor(model => model.PublisherId, Model.Publishers, "Новое издательство:")
         @Html.ValidationMessageFor(model => Model.Publishers)
     </div>
     <div>
