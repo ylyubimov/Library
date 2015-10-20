@@ -78,7 +78,7 @@ namespace Library.Controllers
             }
             if (model.PublisherId != 0) // Воспользовались списком
             {
-                if (ModelState.IsValidField("Record.RecordName") && ModelState.IsValidField("Record.RecordDiscription"))
+                if (ModelState.IsValidField("Record.RecordName") && ModelState.IsValidField("Record.RecordDescription"))
                 {
                     using (LibraryContext db = new LibraryContext())
                     {
