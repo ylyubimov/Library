@@ -28,23 +28,23 @@
     </div>
     <div class="editor-field">
         <label>Название издательства</label>
-        @Html.TextBoxFor(model => model.Record.Author.PublisherName)
-        @Html.ValidationMessageFor(model => model.Record.Author.PublisherName)
+        @Html.TextBoxFor(model => model.Record.RecordPublisher.PublisherName)
+        @Html.ValidationMessageFor(model => model.Record.RecordPublisher.PublisherName)
     </div>
     <div class="editor-field">
         <label>Адрес издательства</label>
-        @Html.TextBoxFor(model => model.Record.Author.Address)
-        @Html.ValidationMessageFor(model => model.Record.Author.Address)
+        @Html.TextBoxFor(model => model.Record.RecordPublisher.Address)
+        @Html.ValidationMessageFor(model => model.Record.RecordPublisher.Address)
     </div>
     <div class="editor-field">
         <label>Контактный телефон издательства</label>
-        @Html.TextBoxFor(model => model.Record.Author.Number)
-        @Html.ValidationMessageFor(model => model.Record.Author.Number)
+        @Html.TextBoxFor(model => model.Record.RecordPublisher.Number)
+        @Html.ValidationMessageFor(model => model.Record.RecordPublisher.Number)
     </div>
     <div class="editor-field">
         <label>Email издательства</label>
-        @Html.TextBoxFor(model => model.Record.Author.Email)
-        @Html.ValidationMessageFor(model => model.Record.Author.Email)
+        @Html.TextBoxFor(model => model.Record.RecordPublisher.Email)
+        @Html.ValidationMessageFor(model => model.Record.RecordPublisher.Email)
     </div>
     <input type="file" name="fileUpload" /><br />
     <input type="submit" value="Отправить" />
