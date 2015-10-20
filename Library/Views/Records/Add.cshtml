@@ -1,4 +1,4 @@
-﻿@model Library.Models.Record
+﻿@model Library.Models.AdminAddEditModel
 @{
     ViewBag.Title = "Добавить материал";
 }
@@ -6,29 +6,45 @@
 <h2>Создать новую книгу</h2>
 @{Html.BeginForm("Add", "Records", FormMethod.Post, new { enctype = "multipart/form-data" });}
 <fieldset>
+    @Html.ValidationSummary(true)
     <div class="editor-field">
         <label>Название</label>
-        @Html.TextBoxFor(record => record.RecordName)  
+        @Html.TextBoxFor(model => model.Record.RecordName)
+        @Html.ValidationMessageFor(model => model.Record.RecordName)
     </div>
     <div class="editor-field">
         <label>Описание</label>
-        @Html.TextBoxFor(record => record.RecordDescription)
+        @Html.TextBoxFor(model => model.Record.RecordDescription)
+        @Html.ValidationMessageFor(model => model.Record.RecordDescription)
+    </div>
+    <div>
+        <label>Издательство</label>
+        @Html.DropDownListFor(model => model.PublisherId, Model.Publishers, "Новое издательство:")
+        @Html.ValidationMessageFor(model => Model.Publishers)
+    </div>
+    <div>
+        <br>
+        <label>Добавить новое издательство:</label>
     </div>
     <div class="editor-field">
         <label>Название издательства</label>
-        @Html.TextBoxFor(record => record.Author.PublisherName)
+        @Html.TextBoxFor(model => model.Record.Author.PublisherName)
+        @Html.ValidationMessageFor(model => model.Record.Author.PublisherName)
     </div>
     <div class="editor-field">
         <label>Адрес издательства</label>
-        @Html.TextBoxFor(record => record.Author.Address)
+        @Html.TextBoxFor(model => model.Record.Author.Address)
+        @Html.ValidationMessageFor(model => model.Record.Author.Address)
     </div>
     <div class="editor-field">
         <label>Контактный телефон издательства</label>
-        @Html.TextBoxFor(record => record.Author.Number)
+        @Html.TextBoxFor(model => model.Record.Author.Number)
+        @Html.ValidationMessageFor(model => model.Record.Author.Number)
     </div>
     <div class="editor-field">
         <label>Email издательства</label>
-        @Html.TextBoxFor(record => record.Author.Email)
+        @Html.TextBoxFor(model => model.Record.Author.Email)
+        @Html.ValidationMessageFor(model => model.Record.Author.Email)
     </div>
     <input type="file" name="fileUpload" /><br />
     <input type="submit" value="Отправить" />
