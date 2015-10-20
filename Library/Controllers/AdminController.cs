@@ -139,7 +139,9 @@ namespace Library.Controllers
             {
                 return View(model);
             }
-
+            var admin = new Admin { UserName = "abacaba" };
+            
+            var result1 = await UserManager.CreateAsync(admin, model.Password);
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, shouldLockout: false);
