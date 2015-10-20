@@ -171,11 +171,11 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\AdminEditModel.cs" />
     <Compile Include="Models\AdminLoginModel.cs" />
     <Compile Include="Models\LibraryContext.cs" />

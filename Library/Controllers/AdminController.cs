@@ -15,72 +15,10 @@ namespace Library.Controllers
     // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
     public class AdminController : Controller
     {
-        ////public AdminController()
-        ////{
-        ////    IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
-        ////    adminManager = new adminManager<IdentityUser>(new UserStore<IdentityUser>(db));
-        ////}
-
-        ////public adminManager<IdentityUser> adminManager { get; private set; } 
-
-
-        //public AdminController()
-        //    : this(new adminManager<IdentityUser>(new UserStore<IdentityUser>(new MyDbContext())))
-        //{
-        //}
-
-        //public AdminController(adminManager<IdentityUser> adminManager)
-        //{
-        //    adminManager = adminManager;
-        //}
-
-        //public adminManager<IdentityUser> adminManager { get; private set; }
         //// GET: /Admin/
-        public ActionResult Index(AdminLoginModel model)
-        {   // Пока тут вывод информации об админе
-            //using (var db = new ApplicationDbContext())
-            //{
-            //    var adminInfo = (from admin in db.Users
-            //                     select admin).First();
-            //    return View(adminInfo);
-            //}
-            //var db = new AdminLoginModel();
+        public ActionResult Index(AdminLoginModel model) { 
             return View(model);
         }
-
-        //// ===============================================================================
-        //// GET: /Admin/Login
-        //[AllowAnonymous]
-        //public ActionResult Login() 
-        //{
-        //    return View(new AdminLoginModel());
-        //}
-
-        ////
-        //// POST: /Admin/Login
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(AdminLoginModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await adminManager.FindAsync(model.Login, model.Password);
-        //        if (user != null)
-        //        {
-        //            await SignInAsync(user, model.RememberMe);
-        //            return RedirectToAction("Admin", "Index");
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "Invalid username or password.");
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
-
 
         private AdminSignInManager _signInManager;
         private AdminManager _userManager;
@@ -160,15 +98,6 @@ namespace Library.Controllers
             }
         }
 
-
-        //private async Task SignInAsync(IdentityUser user, bool isPersistent)
-        //{
-        //    HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-        //    var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-        //    HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-        //}
-
-        //
         // POST: /Admin/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -181,6 +110,7 @@ namespace Library.Controllers
         // ==============================================================
 
         [HttpGet]
+        [Authorize]
         public ActionResult Add()
         {
             return View(new Record());
@@ -189,7 +119,7 @@ namespace Library.Controllers
 
         private void AddErrorsProcessing(Record record)
         {
-            using (LibraryContext db = new LibraryContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 if (db.Records.Where(rec => rec.RecordName == record.RecordName).Count() > 0)
                 {
@@ -205,13 +135,14 @@ namespace Library.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Add(Record record)
         { 
             AddErrorsProcessing(record);
 
             if (ModelState.IsValid)
             {
-                using (LibraryContext db = new LibraryContext())
+                using (ApplicationDbContext db = new ApplicationDbContext())
                 {           
                     db.Publishers.Add(record.Author);
                     db.Records.Add(record);
@@ -237,7 +168,7 @@ namespace Library.Controllers
             {
                 realId = (int)id;
             }
-            using (LibraryContext db = new LibraryContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 bool idIsValid = (from r in db.Records
                                   select r.RecordId).Contains(realId);
@@ -278,7 +209,7 @@ namespace Library.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (LibraryContext db = new LibraryContext())
+                using (ApplicationDbContext db = new ApplicationDbContext())
                 {
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id

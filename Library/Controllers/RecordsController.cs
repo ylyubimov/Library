@@ -10,7 +10,7 @@ namespace Library.Controllers
 {
     public class RecordsController : Controller
     {
-        private LibraryContext db = new LibraryContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ActionResult Index()
         {
@@ -37,7 +37,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Add(Record record)
         {
-            using (LibraryContext db = new LibraryContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 db.Records.Add(record);
                 db.SaveChanges();
@@ -49,7 +49,7 @@ namespace Library.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            using (LibraryContext db = new LibraryContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 Record b = db.Records.Find(id);
                 return View(b);
@@ -59,7 +59,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Edit(int id, Record record)
         {
-            using (LibraryContext db = new LibraryContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 Record b = db.Records.Find(id);
                 b.RecordName = record.RecordName;
