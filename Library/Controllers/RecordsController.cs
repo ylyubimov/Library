@@ -12,6 +12,12 @@ namespace Library.Controllers
     {
         private LibraryContext db = new LibraryContext();
 
+        public ActionResult Modal(int? id)
+        {
+            Record b = db.Records.Find(id);
+            return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
+        }
+
         public ActionResult Index()
         {
             String a = Request["find"];

@@ -162,6 +162,8 @@
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -203,6 +205,7 @@
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Records\Add.cshtml" />
     <Content Include="Views\Records\Edit.cshtml" />
+    <Content Include="Views\Records\_Modal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
