@@ -17,7 +17,7 @@ namespace Library.Controllers
             String a = Request["find"];
             if (!String.IsNullOrEmpty(Request["find"]))
             {
-                return View(db.Records.Where(s => s.RecordName!=null && s.RecordName.Contains(a)).ToList());
+                return View(db.Records.Where(s => s.RecordName!=null && s.RecordName.Contains(a) || s.RecordDescription!=null && s.RecordDescription.Contains(a)).ToList());
             }
             else
             {
