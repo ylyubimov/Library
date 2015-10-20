@@ -36,14 +36,16 @@ namespace Library.Controllers
 
         //public adminManager<IdentityUser> adminManager { get; private set; }
         //// GET: /Admin/
-        public ActionResult Index()
+        public ActionResult Index(AdminLoginModel model)
         {   // Пока тут вывод информации об админе
-            using (var db = new LibraryContext())
-            {
-                var adminInfo = (from admin in db.LibraryAdmins
-                                 select admin).First();
-                return View(adminInfo);
-            }
+            //using (var db = new ApplicationDbContext())
+            //{
+            //    var adminInfo = (from admin in db.Users
+            //                     select admin).First();
+            //    return View(adminInfo);
+            //}
+            //var db = new AdminLoginModel();
+            return View(model);
         }
 
         //// ===============================================================================
