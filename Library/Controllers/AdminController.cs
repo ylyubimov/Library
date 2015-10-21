@@ -16,16 +16,16 @@ using Microsoft.Owin.Security;
 
 namespace Library.Controllers
 {
-    // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
+    // [Authorize] todo: изменить модель базы - сделать с class MyUser:Admin{...}
     public class AdminController : Controller
     {
         public AdminController()
         {
-            IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
-            UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
+            IdentityDbContext<Admin> db = new IdentityDbContext<Admin>();
+            UserManager = new UserManager<Admin>(new UserStore<Admin>(db));
         }
 
-        public UserManager<IdentityUser> UserManager { get; private set; } 
+        public UserManager<Admin> UserManager { get; private set; } 
 
         // GET: /Admin/
         public ActionResult Index()
@@ -71,7 +71,7 @@ namespace Library.Controllers
             return View(model);
         }
 
-        private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        private async Task SignInAsync(Admin user, bool isPersistent)
         {
             HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);

@@ -147,6 +147,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Library.Models.AdminContext.mdf" />
+    <Content Include="App_Data\Library.Models.LibraryContext.mdf" />
+    <Content Include="App_Data\Library.Models.LibraryContext_log.ldf">
+      <DependentUpon>Library.Models.LibraryContext.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -180,6 +185,7 @@
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config">
@@ -210,7 +216,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Data\" />
   </ItemGroup>
   <PropertyGroup>

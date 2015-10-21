@@ -5,7 +5,7 @@ using Owin;
 
 namespace Library
 {
-    public class Startup
+    public partial class Startup
     {
         public void ConfigureAuth(IAppBuilder app)
         { // todo: не заходит сюда!!! см portal
