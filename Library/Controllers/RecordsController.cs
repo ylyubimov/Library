@@ -14,7 +14,15 @@ namespace Library.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Records.ToList());
+            String a = Request["find"];
+            if (!String.IsNullOrEmpty(Request["find"]))
+            {
+                return View(db.Records.Where(s => s.RecordName!=null && s.RecordName.Contains(a)).ToList());
+            }
+            else
+            {
+                return View(db.Records.ToList());
+            }
         }
 
         public ActionResult Record(int? id)
@@ -35,15 +43,30 @@ namespace Library.Controllers
 
 
         [HttpPost]
-        public ActionResult Add(Record record)
+        public ActionResult Add(Record record, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
+                record.RecordId = db.Records.Count();
+                record.PublisherId = db.Publishers.Count();
+                record.Author.PublisherId = record.PublisherId;
+                db.Publishers.Add(record.Author);
                 db.Records.Add(record);
                 db.SaveChanges();
-
-                return Redirect("/Record/Index");
             }
+            foreach (var file in fileUpload)
+            {
+                if (file == null) continue;
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
+                file.SaveAs(System.IO.Path.Combine(path, record.RecordName+".pdf"));
+            }
+            return Redirect("/Records/Index");
+        }
+
+        public FileResult downloadFile(int? id)
+        {
+            Record b = db.Records.Find(id);
+            return File("../../Data/"+b.RecordName+".pdf", "application/pdf");
         }
 
         [HttpGet]

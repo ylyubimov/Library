@@ -203,6 +203,8 @@
     <Content Include="Views\Records\Record.cshtml" />
     <Content Include="Views\Admin\Add.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Records\Add.cshtml" />
+    <Content Include="Views\Records\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

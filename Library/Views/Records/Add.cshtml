@@ -1,0 +1,36 @@
+﻿@model Library.Models.Record
+@{
+    ViewBag.Title = "Добавить материал";
+}
+
+<h2>Создать новую книгу</h2>
+@{Html.BeginForm("Add", "Records", FormMethod.Post, new { enctype = "multipart/form-data" });}
+<fieldset>
+    <div class="editor-field">
+        <label>Название</label>
+        @Html.TextBoxFor(record => record.RecordName)  
+    </div>
+    <div class="editor-field">
+        <label>Описание</label>
+        @Html.TextBoxFor(record => record.RecordDescription)
+    </div>
+    <div class="editor-field">
+        <label>Название издательства</label>
+        @Html.TextBoxFor(record => record.Author.PublisherName)
+    </div>
+    <div class="editor-field">
+        <label>Адрес издательства</label>
+        @Html.TextBoxFor(record => record.Author.Address)
+    </div>
+    <div class="editor-field">
+        <label>Контактный телефон издательства</label>
+        @Html.TextBoxFor(record => record.Author.Number)
+    </div>
+    <div class="editor-field">
+        <label>Email издательства</label>
+        @Html.TextBoxFor(record => record.Author.Email)
+    </div>
+    <input type="file" name="fileUpload" /><br />
+    <input type="submit" value="Отправить" />
+</fieldset>
+@{Html.EndForm();}
