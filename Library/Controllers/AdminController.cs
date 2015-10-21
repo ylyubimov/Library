@@ -1,103 +1,84 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
+
+using System.Text;
+using System.Threading.Tasks;
 using Library.Models;
+using System.Data.Entity.Validation;
+using System.Net;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Security;
+using Microsoft.Owin.Security;
 
 namespace Library.Controllers
 {
     // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
     public class AdminController : Controller
     {
-        //// GET: /Admin/
-        public ActionResult Index(AdminLoginModel model) { 
-            return View(model);
-        }
-
-        private AdminSignInManager _signInManager;
-        private AdminManager _userManager;
-
         public AdminController()
         {
+            IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
+            UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
         }
 
-        public AdminController(AdminManager userManager, AdminSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
+        public UserManager<IdentityUser> UserManager { get; private set; } 
 
-        public AdminSignInManager SignInManager
-        {
-            get
+        // GET: /Admin/
+        public ActionResult Index()
+        {   // Пока тут вывод информации об админе
+            using (var db = new LibraryContext())
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<AdminSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
+                var adminInfo = (from admin in db.LibraryAdmins
+                                 select admin).First();
+                return View(adminInfo);
             }
         }
 
-        public AdminManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<AdminManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
-        //
-        // GET: /Account/Login
+        // ===============================================================================
+        // GET: /Admin/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login() 
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View(new AdminLoginModel());
         }
 
         //
-        // POST: /Account/Login
+        // POST: /Admin/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AdminLoginModel model, string returnUrl)
+        public async Task<ActionResult> Login(AdminLoginModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var user = await UserManager.FindAsync(model.Login, model.Password);
+                if (user != null)
+                {
+                    await SignInAsync(user, model.RememberMe);
+                    return RedirectToAction("Admin", "Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
             }
-            var admin = new Admin { UserName = "abacaba" };
-            
-            var result1 = await UserManager.CreateAsync(admin, model.Password);
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
-            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
+        private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
+
+        //
         // POST: /Admin/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -110,7 +91,6 @@ namespace Library.Controllers
         // ==============================================================
 
         [HttpGet]
-        [Authorize]
         public ActionResult Add()
         {
             return View(new Record());
@@ -119,7 +99,7 @@ namespace Library.Controllers
 
         private void AddErrorsProcessing(Record record)
         {
-            using (ApplicationDbContext db = new ApplicationDbContext())
+            using (LibraryContext db = new LibraryContext())
             {
                 if (db.Records.Where(rec => rec.RecordName == record.RecordName).Count() > 0)
                 {
@@ -135,14 +115,13 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public ActionResult Add(Record record)
         { 
             AddErrorsProcessing(record);
 
             if (ModelState.IsValid)
             {
-                using (ApplicationDbContext db = new ApplicationDbContext())
+                using (LibraryContext db = new LibraryContext())
                 {           
                     db.Publishers.Add(record.Author);
                     db.Records.Add(record);
@@ -168,7 +147,7 @@ namespace Library.Controllers
             {
                 realId = (int)id;
             }
-            using (ApplicationDbContext db = new ApplicationDbContext())
+            using (LibraryContext db = new LibraryContext())
             {
                 bool idIsValid = (from r in db.Records
                                   select r.RecordId).Contains(realId);
@@ -181,15 +160,6 @@ namespace Library.Controllers
                 AdminEditModel viewModel = new AdminEditModel(currentBook, currentPublisher);
                 return View(viewModel);
             }
-        }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Admin");
         }
 
         private void ChangeEntities(Record record, Publisher publisher, AdminEditModel model)
@@ -209,7 +179,7 @@ namespace Library.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (ApplicationDbContext db = new ApplicationDbContext())
+                using (LibraryContext db = new LibraryContext())
                 {
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id
