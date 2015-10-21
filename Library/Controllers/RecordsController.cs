@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Library.Controllers
 {
-    public class RecordsController : Controller // todo: добавить в форму string AuthorName
+    public class RecordsController : Controller
     {
         private LibraryContext db = new LibraryContext();
 
@@ -23,7 +23,7 @@ namespace Library.Controllers
             String a = Request["find"];
             if (!String.IsNullOrEmpty(Request["find"]))
             {
-                return View(db.Records.Where(s => s.RecordName!=null && s.RecordName.Contains(a) || s.RecordDescription!=null && s.RecordDescription.Contains(a)).ToList());
+                return View(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
             }
             else
             {
@@ -38,7 +38,7 @@ namespace Library.Controllers
             {
                 return HttpNotFound();
             }
-           return View(b);
+            return View(b);
         }
 
         private List<SelectListItem> GetPublishersList()
@@ -56,39 +56,58 @@ namespace Library.Controllers
             }
         }
 
-        private void EditRecord(Record record, string name, string description, Publisher publisher)
+        private void EditRecord(Record record, string name, string description, string author, Publisher publisher)
         {
             record.RecordName = name;
             record.RecordDescription = description;
+            record.AuthorName = author;
             record.RecordPublisher = publisher;
         }
 
-        private ActionResult WriteToDataBaseRecordAndPublisher(int id, AdminAddEditModel model, bool add)
+        private void EditPublisher(Publisher publisher, string name, string address, string number, string email)
         {
-            bool edit = !add;
-            if (model.PublisherId != 0) // Воспользовались списком
+            publisher.PublisherName = name;
+            publisher.Address = address;
+            publisher.Number = number;
+            publisher.Email = email;
+        }
+
+        private ActionResult AddResult(AdminAddEditModel model)
+        {
+            using (LibraryContext db = new LibraryContext())
             {
-                if (ModelState.IsValidField("Record.RecordName") && ModelState.IsValidField("Record.RecordDescription"))
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
                 {
-                    using (LibraryContext db = new LibraryContext())
-                    {
-                        int realPublisherId = model.PublisherId - 1;
-                        if (edit)
-                        {
-                            var recordQuery = (from r in db.Records
-                                               where r.RecordId == id
-                                               select r).First();
-                            Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
-                            EditRecord(recordQuery, model.Record.RecordName, model.Record.RecordDescription, publisher);
-                        }
-                        else
-                        {
-                            model.Record.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
-                            db.Records.Add(model.Record);
-                        }
-                        db.SaveChanges();
-                        return Redirect("/Records/Index");
-                    }
+                    model.Publishers = GetPublishersList();
+                    return View(model);
+                }
+                if (model.PublisherId != 0) // Воспользовались списком
+                {
+                    int realPublisherId = model.PublisherId - 1;
+                    Record newRecord = new Record();
+                    Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                    EditRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor, publisher);
+                    db.Records.Add(newRecord);
+                    db.SaveChanges();
+                    /* todo: Load pdf here*/
+                    return Redirect("/Records/Index");
+                }
+                // Новое издательство. Валидация создаваемого издательства
+                if (db.Publishers.Where(rec => rec.PublisherName == model.PublisherName).FirstOrDefault() != null)
+                {
+                    ModelState.AddModelError("PublisherName", "Издатель с таким названием уже существует");
+                }
+                if (ModelState.IsValidField("PublisherName") && ModelState.IsValidField("PublisherEmail"))
+                {
+                    Publisher newPublisher = new Publisher();
+                    EditPublisher(newPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
+                    Record newRecord = new Record();
+                    EditRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor, newPublisher);
+                    db.Records.Add(newRecord);
+                    db.Publishers.Add(newPublisher);
+                    db.SaveChanges();
+                    /* todo: Load pdf here*/
+                    return Redirect("/Records/Index");
                 }
                 else
                 {
@@ -96,39 +115,52 @@ namespace Library.Controllers
                     return View(model);
                 }
             }
+        }
 
-            ModelState["PublisherId"].Errors.Clear(); // Игнорирования  [required] PublishersId в форме
-            using (LibraryContext db = new LibraryContext())  // Валидация создаваемого издательства
+        private ActionResult EditResult(AdminAddEditModel model, int id)
+        {
+            using (LibraryContext db = new LibraryContext())
             {
-                if (db.Publishers.Where(rec => rec.PublisherName == model.Record.RecordPublisher.PublisherName).FirstOrDefault() != null)
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
                 {
-                    ModelState.AddModelError("Record.RecordPublisher.PublisherName", "Издатель с таким названием уже существует");
+                    model.Publishers = GetPublishersList();
+                    return View(model);
                 }
-            }
-            if (ModelState.IsValid) // todo: убрать Errors().clear() + добавить просто валидацию полей, а не всей модели!! С созданием нового publisher'a
-            {
-                using (LibraryContext db = new LibraryContext())
+                if (model.PublisherId != 0) // Воспользовались списком
                 {
-                    if (edit)
-                    {
-                        var recordQuery = (from r in db.Records
-                                           where r.RecordId == id
-                                           select r).First();
-                        EditRecord(recordQuery, model.Record.RecordName, model.Record.RecordDescription, model.Record.RecordPublisher);
-                    }
-                    else
-                    {
-                        db.Records.Add(model.Record);
-                    }
-                    db.Publishers.Add(model.Record.RecordPublisher);
+                    int realPublisherId = model.PublisherId - 1;
+                    var recordQuery = (from r in db.Records
+                                       where r.RecordId == id
+                                       select r).First();
+                    Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
+                    EditRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor, publisher);
                     db.SaveChanges();
+                    /* todo: Load pdf here*/
                     return Redirect("/Records/Index");
                 }
-            }
-            else
-            {
-                model.Publishers = GetPublishersList();
-                return View(model);
+                // Новое издательство. Валидация создаваемого издательства
+                if (db.Publishers.Where(rec => rec.PublisherName == model.PublisherName).FirstOrDefault() != null)
+                {
+                    ModelState.AddModelError("PublisherName", "Издатель с таким названием уже существует");
+                }
+                if (ModelState.IsValidField("PublisherName") && ModelState.IsValidField("PublisherEmail"))
+                {
+                    Publisher newPublisher = new Publisher();
+                    EditPublisher(newPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
+                    var recordQuery = (from r in db.Records
+                                       where r.RecordId == id
+                                       select r).First();
+                    EditRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor, newPublisher);
+                    db.Publishers.Add(newPublisher);
+                    db.SaveChanges();
+                    /* todo: Load pdf here*/
+                    return Redirect("/Records/Index");
+                }
+                else
+                {
+                    model.Publishers = GetPublishersList();
+                    return View(model);
+                }
             }
         }
 
@@ -144,13 +176,13 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
-            foreach (var file in fileUpload)
+            /*foreach (var file in fileUpload) // Загрузка и добавление пдфок
             {
                 if (file == null) continue;
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
-                file.SaveAs(System.IO.Path.Combine(path, model.Record.RecordName + ".pdf"));
-            }            
-            return WriteToDataBaseRecordAndPublisher(0, model, true);
+                file.SaveAs(System.IO.Path.Combine(path, model.RecordName + ".pdf"));
+            }*/
+            return AddResult(model);
         }
 
         [HttpGet]
@@ -175,9 +207,11 @@ namespace Library.Controllers
                 }
                 AdminAddEditModel model = new AdminAddEditModel();
                 model.Publishers = GetPublishersList();
-                model.Record = (from r in db.Records where r.RecordId == realId select r).First();
-                model.Record.RecordPublisher = new Publisher();
-                model.PublisherId = model.Record.PublisherId + 1;
+                Record baseRecord = (from r in db.Records where r.RecordId == realId select r).First();
+                model.RecordName = baseRecord.RecordName;
+                model.RecordDescription = baseRecord.RecordDescription;
+                model.RecordAuthor = baseRecord.AuthorName;
+                model.PublisherId = baseRecord.PublisherId + 1;
                 return View(model);
             }
         }
@@ -185,7 +219,7 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Edit(int id, AdminAddEditModel model)
         {
-            return WriteToDataBaseRecordAndPublisher(id, model, false);
+            return EditResult(model, id);
         }
 
         public FileResult downloadFile(int? id)

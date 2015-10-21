@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,11 +13,28 @@ namespace Library.Models
         public AdminAddEditModel()
         {
             Publishers = new List<SelectListItem>();
-            Record = new Record();
         }
 
         public int PublisherId { get; set; }
-        public Record Record { get; set; }
+
+        [Required]
+        public string RecordName { get; set; }
+
+        public string RecordDescription { get; set; }
+
+        [Required]
+        public string RecordAuthor { get; set; }
+
+        [Required]
+        public string PublisherName { get; set; }
+
+        public string PublisherAddress { get; set; }
+
+        public string PublisherNumber { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        public string PublisherEmail { get; set; }
+
         public List<SelectListItem> Publishers { get; set; }
     }
 }
