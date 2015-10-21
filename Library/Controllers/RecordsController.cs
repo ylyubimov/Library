@@ -72,7 +72,38 @@ namespace Library.Controllers
             publisher.Email = email;
         }
 
-        private ActionResult AddResult(AdminAddEditModel model)
+        private void LoadPdf(string name, IEnumerable<HttpPostedFileBase> fileUpload)
+        {
+            if (fileUpload == null)
+            {
+                return;
+
+            }
+            foreach (var file in fileUpload)
+            {
+                if (file == null) continue;
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
+                file.SaveAs(System.IO.Path.Combine(path, name + ".pdf"));
+            }
+        }
+
+        public FileResult downloadFile(int? id)
+        {
+            Record b = db.Records.Find(id);
+            return File("../../Data/" + b.RecordName + ".pdf", "application/pdf");
+        }
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            AdminAddEditModel model = new AdminAddEditModel();
+            model.Publishers = GetPublishersList();
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
             {
@@ -89,7 +120,7 @@ namespace Library.Controllers
                     EditRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor, publisher);
                     db.Records.Add(newRecord);
                     db.SaveChanges();
-                    /* todo: Load pdf here*/
+                    LoadPdf(newRecord.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 // Новое издательство. Валидация создаваемого издательства
@@ -106,7 +137,7 @@ namespace Library.Controllers
                     db.Records.Add(newRecord);
                     db.Publishers.Add(newPublisher);
                     db.SaveChanges();
-                    /* todo: Load pdf here*/
+                    LoadPdf(newRecord.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 else
@@ -117,7 +148,39 @@ namespace Library.Controllers
             }
         }
 
-        private ActionResult EditResult(AdminAddEditModel model, int id)
+        [HttpGet]
+        public ActionResult Edit(int? id)
+        {
+            int realId;
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(400, "Expected books id");
+            }
+            else
+            {
+                realId = (int)id;
+            }
+            using (LibraryContext db = new LibraryContext())
+            {
+                bool idIsValid = (from r in db.Records
+                                  select r.RecordId).Contains(realId);
+                if (!idIsValid)
+                {
+                    return new HttpStatusCodeResult(404, "No book with such id: " + realId);
+                }
+                AdminAddEditModel model = new AdminAddEditModel();
+                model.Publishers = GetPublishersList();
+                Record baseRecord = (from r in db.Records where r.RecordId == realId select r).First();
+                model.RecordName = baseRecord.RecordName;
+                model.RecordDescription = baseRecord.RecordDescription;
+                model.RecordAuthor = baseRecord.AuthorName;
+                model.PublisherId = baseRecord.PublisherId + 1;
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, AdminAddEditModel model)
         {
             using (LibraryContext db = new LibraryContext())
             {
@@ -163,70 +226,5 @@ namespace Library.Controllers
                 }
             }
         }
-
-        [HttpGet]
-        public ActionResult Add()
-        {
-            AdminAddEditModel model = new AdminAddEditModel();
-            model.Publishers = GetPublishersList();
-            return View(model);
-        }
-
-
-        [HttpPost]
-        public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
-        {
-            /*foreach (var file in fileUpload) // Загрузка и добавление пдфок
-            {
-                if (file == null) continue;
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
-                file.SaveAs(System.IO.Path.Combine(path, model.RecordName + ".pdf"));
-            }*/
-            return AddResult(model);
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int? id)
-        {
-            int realId;
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(400, "Expected books id");
-            }
-            else
-            {
-                realId = (int)id;
-            }
-            using (LibraryContext db = new LibraryContext())
-            {
-                bool idIsValid = (from r in db.Records
-                                  select r.RecordId).Contains(realId);
-                if (!idIsValid)
-                {
-                    return new HttpStatusCodeResult(404, "No book with such id: " + realId);
-                }
-                AdminAddEditModel model = new AdminAddEditModel();
-                model.Publishers = GetPublishersList();
-                Record baseRecord = (from r in db.Records where r.RecordId == realId select r).First();
-                model.RecordName = baseRecord.RecordName;
-                model.RecordDescription = baseRecord.RecordDescription;
-                model.RecordAuthor = baseRecord.AuthorName;
-                model.PublisherId = baseRecord.PublisherId + 1;
-                return View(model);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Edit(int id, AdminAddEditModel model)
-        {
-            return EditResult(model, id);
-        }
-
-        public FileResult downloadFile(int? id)
-        {
-            Record b = db.Records.Find(id);
-            return File("../../Data/" + b.RecordName + ".pdf", "application/pdf");
-        }
-
     }
 }

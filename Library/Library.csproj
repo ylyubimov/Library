@@ -180,6 +180,7 @@
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\AdminAddEditModel.cs" />
     <Compile Include="Models\AdminLoginModel.cs" />
+    <Compile Include="Models\DataBaseInitializer.cs" />
     <Compile Include="Models\LibraryContext.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\Record.cs" />
