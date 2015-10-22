@@ -10,10 +10,6 @@ namespace Library.Models
     {
         public DbSet<Record> Records { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
-
-        public LibraryContext()
-            : base("LibraryConnection")
-        {
-        }
+        public DbSet<Admin> LibraryAdmins { get; set; }
     }
 }

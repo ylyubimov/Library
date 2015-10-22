@@ -1,7 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Library.Startup))]
+[assembly: OwinStartup(typeof(Library.Startup))]
 
 namespace Library
 {
