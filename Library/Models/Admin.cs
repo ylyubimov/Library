@@ -13,12 +13,6 @@ namespace Library.Models
 {
     public class Admin : IdentityUser
     {
-        [Required]
-        public string Login { get; set; }
-
-        [Required]
-        [MinLength(6, ErrorMessage = "Пароль должен быть длиннее 6 символов.")]
-        public string Password { get; set; }
 
         public string Name { get; set; }
 
@@ -34,13 +28,20 @@ namespace Library.Models
     public class AdminDbContext : IdentityDbContext<Admin>
     {
         public AdminDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("AdminDBContext")
         {
+            Database.SetInitializer(new MyDbInitializer());
         }
 
-        public static AdminDbContext Create()
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            return new AdminDbContext();
+            base.OnModelCreating(modelBuilder);
+
+            // Change the name of the table to be Users instead of AspNetUsers
+            modelBuilder.Entity<IdentityUser>()
+                .ToTable("Users");
+            modelBuilder.Entity<Admin>()
+                .ToTable("Users");
         }
     }
 }

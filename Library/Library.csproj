@@ -147,7 +147,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Library.Models.AdminContext.mdf" />
+    <Content Include="App_Data\Library.Models.AdminsContext.mdf" />
     <Content Include="App_Data\Library.Models.LibraryContext.mdf" />
     <Content Include="App_Data\Library.Models.LibraryContext_log.ldf">
       <DependentUpon>Library.Models.LibraryContext.mdf</DependentUpon>
@@ -169,6 +169,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />

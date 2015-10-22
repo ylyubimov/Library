@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
-using System.Text;
-using System.Threading.Tasks;
-using Library.Models;
-using System.Data.Entity.Validation;
-using System.Net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Web.Security;
 using Microsoft.Owin.Security;
+using Library.Models;
+using Owin;
 
 namespace Library.Controllers
 {
@@ -20,21 +17,30 @@ namespace Library.Controllers
     public class AdminController : Controller
     {
         public AdminController()
+            : this(new UserManager<Admin>(new UserStore<Admin>(new AdminDbContext())))
         {
-            IdentityDbContext<Admin> db = new IdentityDbContext<Admin>();
-            UserManager = new UserManager<Admin>(new UserStore<Admin>(db));
         }
 
-        public UserManager<Admin> UserManager { get; private set; } 
+        public AdminController(UserManager<Admin> userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public UserManager<Admin> UserManager { get; private set; }
+
 
         // GET: /Admin/
         public ActionResult Index()
         {   // Пока тут вывод информации об админе
-            using (var db = new LibraryContext())
+            using (var db = new AdminDbContext())
             {
-                var adminInfo = (from admin in db.LibraryAdmins
-                                 select admin).First();
-                return View(adminInfo);
+                var user = new Admin() { UserName = "abacaba" };
+
+                // Store Gender as Claim
+                user.Claims.Add(new IdentityUserClaim());
+
+                //var result = await UserManager.CreateAsync(user, "dabacaba");
+                return View(user);
             }
         }
 
