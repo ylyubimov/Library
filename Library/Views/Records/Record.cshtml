@@ -5,7 +5,14 @@
         <hr />
         <dl class="dl-horizontal">
                <h5>@Html.DisplayFor(model => model.RecordName)</h5>
-            @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
+                @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.RecordName + ".pdf")))
+                {
+                    @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
+                }
+                else
+                {
+                    @Html.ActionLink("Хрен вам", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "disabled btn btn-danger" })
+                }
         </dl>
     </div>
 

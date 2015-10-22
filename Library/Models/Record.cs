@@ -16,13 +16,14 @@ namespace Library.Models
         [Required]
         public string RecordName { get; set; }
 
-        [Required]
-        [MinLength(10, ErrorMessage = "Описание слишком короткое.")]
         public string RecordDescription { get; set; }
+
+        [Required]
+        public string AuthorName { get; set; }
 
         public int PublisherId { get; set; }
 
         [ForeignKey("PublisherId")]
-        public virtual Publisher Author { get; set; } 
+        public virtual Publisher RecordPublisher { get; set; } 
     }
 }

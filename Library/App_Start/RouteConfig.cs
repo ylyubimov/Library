@@ -16,7 +16,7 @@ namespace Library
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Records", action = "Index", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
@@ -36,7 +36,6 @@ namespace Library
                 url: "Admin/Edit/{id}",
                 defaults: new { controller = "Admin", action = "Edit", id = UrlParameter.Optional }
             );
-
         }
     }
 }
