@@ -27,13 +27,13 @@ namespace Library
 
             routes.MapRoute(
                 name: "Add",
-                url: "Admin/Add",
+                url: "Records/Add",
                 defaults: new { controller = "Admin", action = "Add" }
             );
 
             routes.MapRoute(
                 name: "Edit",
-                url: "Admin/Edit/{id}",
+                url: "Records/Edit/{id}",
                 defaults: new { controller = "Admin", action = "Edit", id = UrlParameter.Optional }
             );
         }

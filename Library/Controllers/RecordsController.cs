@@ -226,5 +226,34 @@ namespace Library.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        //[Route("{id:int}")] <- todo
+        public ActionResult Delete(int id)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                var recordToDelete = (from r in db.Records where r.RecordId == id select r).FirstOrDefault();
+                if (recordToDelete == null)
+                {
+                    return new HttpStatusCodeResult(404, "No book with such id: " + id);
+                }
+                else
+                {
+                    return View(new AdminDeletionModel(recordToDelete, recordToDelete.RecordPublisher));
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, AdminDeletionModel model)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                db.Records.Remove((from r in db.Records where r.RecordId == id select r).FirstOrDefault());
+                db.SaveChanges();
+                return Redirect("/Records/Index");
+            }
+        }
     }
 }
