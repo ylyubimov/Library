@@ -138,6 +138,7 @@ namespace Library.Controllers
                 {
                     int realPublisherId = model.PublisherId - 1;
                     Record newRecord = new Record();
+                    newRecord.RecordPublisher = new Publisher();
                     editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
                     newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
@@ -153,6 +154,7 @@ namespace Library.Controllers
                 if (ModelState.IsValidField("PublisherName") && ModelState.IsValidField("PublisherEmail"))
                 {
                     Record newRecord = new Record();
+                    newRecord.RecordPublisher = new Publisher();
                     editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
                     editPublisher(newRecord.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Records.Add(newRecord);
