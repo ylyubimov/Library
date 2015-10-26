@@ -8,7 +8,7 @@ namespace Library.Models
     public class AdminDeletionModel
     {
         public AdminDeletionModel()
-        { 
+        {
         }
 
         public AdminDeletionModel(Record _record, Publisher _publisher)
