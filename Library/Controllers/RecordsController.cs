@@ -10,6 +10,13 @@ namespace Library.Controllers
 {
     public class RecordsController : Controller
     {
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         private LibraryContext db = new LibraryContext();
 
         public ActionResult Modal(int? id)
@@ -56,6 +63,7 @@ namespace Library.Controllers
             }
         }
 
+        [Authorize]
         private void EditRecord(Record record, string name, string description, string author, Publisher publisher)
         {
             record.RecordName = name;
@@ -64,6 +72,8 @@ namespace Library.Controllers
             record.RecordPublisher = publisher;
         }
 
+
+        [Authorize]
         private void EditPublisher(Publisher publisher, string name, string address, string number, string email)
         {
             publisher.PublisherName = name;
@@ -72,6 +82,8 @@ namespace Library.Controllers
             publisher.Email = email;
         }
 
+
+        [Authorize]
         private void LoadPdf(string name, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             if (fileUpload == null)
@@ -94,6 +106,7 @@ namespace Library.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Add()
         {
             AdminAddEditModel model = new AdminAddEditModel();
@@ -101,8 +114,8 @@ namespace Library.Controllers
             return View(model);
         }
 
-
         [HttpPost]
+        [Authorize]
         public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
@@ -149,6 +162,7 @@ namespace Library.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             int realId;
@@ -180,6 +194,7 @@ namespace Library.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Edit(int id, AdminAddEditModel model)
         {
             using (LibraryContext db = new LibraryContext())
