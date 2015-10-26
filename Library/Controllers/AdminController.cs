@@ -40,6 +40,12 @@ namespace Library.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -47,6 +53,8 @@ namespace Library.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(AdminLoginModel model, string returnUrl)
         {
+            Admin newAdmin = new Admin { Name = "abacaba", UserName = "abacaba" };
+            UserManager.Create(newAdmin, "dabacaba");
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);
@@ -73,7 +81,6 @@ namespace Library.Controllers
             }
         }
 
-
         private async Task SignInAsync(Admin user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
@@ -97,7 +104,7 @@ namespace Library.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Admin");
             }
         }
     }

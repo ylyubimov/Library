@@ -9,11 +9,11 @@
 <fieldset>
     <div align="center">
         <label>Имя</label>
-        @Html.TextBoxFor(model => model.Login)
+        @Html.TextBoxFor(model => model.UserName)
     </div>
     <div align="center">
         <label>Пароль</label>
-        @Html.TextBoxFor( model => model.Password)
+        @Html.TextBoxFor( model => model.PasswordHash)
     </div>
 </fieldset>
 @{Html.EndForm();}

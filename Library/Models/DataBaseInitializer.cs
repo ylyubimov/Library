@@ -27,11 +27,9 @@ namespace Library.Models
             newRecord.RecordPublisher = newPublisher;
             db.Records.Add(newRecord);
 
-            var userS = new UserManager<Admin>(new UserStore<Admin>(db));
-            Admin newAdmin = new Admin { Name = "abacaba", UserName = "abacaba" };
-            userS.Create(newAdmin, "dabacaba");
-
-            db.Admins.Add(newAdmin);
+            newRecord = new Record { RecordName = "Матанчик 666 часть", RecordDescription = "Матан для нас", AuthorName = "Иванов" };
+            newRecord.RecordPublisher = newPublisher;
+            db.Records.Add(newRecord);
 
             db.SaveChanges();
         }
