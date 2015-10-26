@@ -20,38 +20,32 @@ namespace Library.Controllers
     public class AdminController : Controller
     {
         public AdminController()
+            : this(new UserManager<Admin>(new UserStore<Admin>(new LibraryContext())))
         {
-            IdentityDbContext<Admin> db = new IdentityDbContext<Admin>();
-            UserManager = new UserManager<Admin>(new UserStore<Admin>(db));
         }
 
-        public UserManager<Admin> UserManager { get; private set; } 
-
-        // GET: /Admin/
-        public ActionResult Index()
-        {   // Пока тут вывод информации об админе
-            using (var db = new LibraryContext())
-            {
-                var adminInfo = (from admin in db.LibraryAdmins
-                                 select admin).First();
-                return View(adminInfo);
-            }
+        public AdminController(UserManager<Admin> userManager)
+        {
+            UserManager = userManager;
         }
 
-        // ===============================================================================
-        // GET: /Admin/Login
+        public UserManager<Admin> UserManager { get; private set; }
+
+        //
+        // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login() 
+        public ActionResult Login(string returnUrl)
         {
-            return View(new AdminLoginModel());
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
         //
-        // POST: /Admin/Login
+        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AdminLoginModel model)
+        public async Task<ActionResult> Login(AdminLoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +53,7 @@ namespace Library.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-                    return RedirectToAction("Admin", "Index");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
@@ -71,130 +65,39 @@ namespace Library.Controllers
             return View(model);
         }
 
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
+
+
         private async Task SignInAsync(Admin user, bool isPersistent)
         {
-            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
-        //
-        // POST: /Admin/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        private void AddErrors(IdentityResult result)
         {
-            HttpContext.GetOwinContext().Authentication.SignOut();
-            return RedirectToAction("Records", "Index");
-        }
-
-        // ==============================================================
-
-        [HttpGet]
-        public ActionResult Add()
-        {
-            return View(new Record());
-        }
-
-
-        private void AddErrorsProcessing(Record record)
-        {
-            using (LibraryContext db = new LibraryContext())
+            foreach (var error in result.Errors)
             {
-                if (db.Records.Where(rec => rec.RecordName == record.RecordName).Count() > 0)
-                {
-                    ModelState.AddModelError("RecordName", "Книга с таким названием уже существует");
-                }
-
-                // todo: проверка ниже нужна для будущего выпадающего списка: чтобы не создать нового publishera, если он существует
-                if (db.Publishers.Where(rec => rec.PublisherName == record.Author.PublisherName).Count() > 0)
-                {
-                    ModelState.AddModelError("Author.PublisherName", "Издатель с таким названием уже существует");
-                }
+                ModelState.AddModelError("", error);
             }
         }
 
-        [HttpPost]
-        public ActionResult Add(Record record)
-        { 
-            AddErrorsProcessing(record);
-
-            if (ModelState.IsValid)
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
             {
-                using (LibraryContext db = new LibraryContext())
-                {           
-                    db.Publishers.Add(record.Author);
-                    db.Records.Add(record);
-                    db.SaveChanges();
-                    return Redirect("/Admin/Index");
-                }
+                return Redirect(returnUrl);
             }
             else
             {
-                return View(record);
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int? id)
-        {
-            int realId;
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(400, "Expected books id");
-            }
-            else
-            {
-                realId = (int)id;
-            }
-            using (LibraryContext db = new LibraryContext())
-            {
-                bool idIsValid = (from r in db.Records
-                                  select r.RecordId).Contains(realId);
-                if (!idIsValid)
-                {
-                    return new HttpStatusCodeResult(404, "No book with such id: " + realId);
-                }
-                Record currentBook = (from r in db.Records where r.RecordId == realId select r).First();
-                Publisher currentPublisher = (from p in db.Publishers where p.PublisherId == currentBook.PublisherId select p).First();
-                AdminEditModel viewModel = new AdminEditModel(currentBook, currentPublisher);
-                return View(viewModel);
-            }
-        }
-
-        private void ChangeEntities(Record record, Publisher publisher, AdminEditModel model)
-        {
-            record.RecordName = model.record.RecordName;
-            record.RecordDescription = model.record.RecordDescription;
-            record.Author = model.record.Author;
-            publisher.PublisherName = model.publisher.PublisherName;
-            publisher.Address = model.publisher.Address;
-            publisher.Email = model.publisher.Email;
-            publisher.Number = model.publisher.Number;
-            record.Author = publisher;
-        }
-
-        [HttpPost]
-        public ActionResult Edit(int id, AdminEditModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                using (LibraryContext db = new LibraryContext())
-                {
-                    var recordQuery = (from r in db.Records
-                                       where r.RecordId == id
-                                       select r).First();
-                    var publisherQuery = (from p in db.Publishers
-                                          where p.PublisherId == recordQuery.PublisherId
-                                          select p).First();
-                    ChangeEntities(recordQuery, publisherQuery, viewModel);
-                    db.SaveChanges();
-                    return Redirect("/Admin/Index");
-                }
-            }
-            else
-            {
-                return View(viewModel);
+                return RedirectToAction("Index", "Home");
             }
         }
     }
