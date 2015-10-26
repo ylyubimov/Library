@@ -16,50 +16,52 @@ using Microsoft.Owin.Security;
 
 namespace Library.Controllers
 {
-    // [Authorize] todo: изменить модель базы - сделать с class MyUser:IdentityUser{...}
+    // [Authorize] todo: изменить модель базы - сделать с class MyUser:Admin{...}
     public class AdminController : Controller
     {
         public AdminController()
+            : this(new UserManager<Admin>(new UserStore<Admin>(new LibraryContext())))
         {
-            IdentityDbContext<IdentityUser> db = new IdentityDbContext<IdentityUser>();
-            UserManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(db));
         }
 
-        public UserManager<IdentityUser> UserManager { get; private set; }
-
-        // GET: /Admin/
-        public ActionResult Index()
-        {   // Пока тут вывод информации об админе
-            using (var db = new LibraryContext())
-            {
-                var adminInfo = (from admin in db.LibraryAdmins
-                                 select admin).First();
-                return View(adminInfo);
-            }
+        public AdminController(UserManager<Admin> userManager)
+        {
+            UserManager = userManager;
         }
 
-        // ===============================================================================
-        // GET: /Admin/Login
+        public UserManager<Admin> UserManager { get; private set; }
+
+        //
+        // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
-            return View(new AdminLoginModel());
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Index()
+        {
+            return View();
         }
 
         //
-        // POST: /Admin/Login
+        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AdminLoginModel model)
+        public async Task<ActionResult> Login(AdminLoginModel model, string returnUrl)
         {
+            Admin newAdmin = new Admin { Name = "abacaba", UserName = "abacaba" };
+            UserManager.Create(newAdmin, "dabacaba");
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-                    return RedirectToAction("Admin", "Index");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
@@ -71,23 +73,39 @@ namespace Library.Controllers
             return View(model);
         }
 
-        private async Task SignInAsync(IdentityUser user, bool isPersistent)
+        private IAuthenticationManager AuthenticationManager
         {
-            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
+
+        private async Task SignInAsync(Admin user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
-        //
-        // POST: /Admin/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        private void AddErrors(IdentityResult result)
         {
-            HttpContext.GetOwinContext().Authentication.SignOut();
-            return RedirectToAction("Records", "Index");
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
         }
 
-        // ==============================================================
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+        }
     }
 }
