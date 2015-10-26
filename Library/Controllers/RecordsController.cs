@@ -21,34 +21,43 @@ namespace Library.Controllers
 
         public ActionResult Modal(int? id)
         {
-            Record b = db.Records.Find(id);
-            return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
+            using (LibraryContext db = new LibraryContext())
+            {
+                Record b = db.Records.Find(id);
+                return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
+            }
         }
 
         public ActionResult Index()
         {
-            String a = Request["find"];
-            if (!String.IsNullOrEmpty(Request["find"]))
+            using (LibraryContext db = new LibraryContext())
             {
-                return View(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
-            }
-            else
-            {
-                return View(db.Records.ToList());
+                String a = Request["find"];
+                if (!String.IsNullOrEmpty(Request["find"]))
+                {
+                    return View(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
+                }
+                else
+                {
+                    return View(db.Records.ToList());
+                }
             }
         }
 
         public ActionResult Record(int? id)
         {
-            Record b = db.Records.Find(id);
-            if (b == null)
+            using (LibraryContext db = new LibraryContext())
             {
-                return HttpNotFound();
+                Record b = db.Records.Find(id);
+                if (b == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(b);
             }
-            return View(b);
         }
 
-        private List<SelectListItem> GetPublishersList()
+        private List<SelectListItem> getPublishersList()
         {
             List<SelectListItem> publishers = new List<SelectListItem>();
             using (LibraryContext db = new LibraryContext())
@@ -64,17 +73,15 @@ namespace Library.Controllers
         }
 
         [Authorize]
-        private void EditRecord(Record record, string name, string description, string author, Publisher publisher)
+        private void editRecord(Record record, string name, string description, string author)
         {
             record.RecordName = name;
             record.RecordDescription = description;
             record.AuthorName = author;
-            record.RecordPublisher = publisher;
         }
 
-
         [Authorize]
-        private void EditPublisher(Publisher publisher, string name, string address, string number, string email)
+        private void editPublisher(Publisher publisher, string name, string address, string number, string email)
         {
             publisher.PublisherName = name;
             publisher.Address = address;
@@ -82,9 +89,8 @@ namespace Library.Controllers
             publisher.Email = email;
         }
 
-
         [Authorize]
-        private void LoadPdf(string name, IEnumerable<HttpPostedFileBase> fileUpload)
+        private void loadPdf(string name, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             if (fileUpload == null)
             {
@@ -101,8 +107,11 @@ namespace Library.Controllers
 
         public FileResult downloadFile(int? id)
         {
-            Record b = db.Records.Find(id);
-            return File("../../Data/" + b.RecordName + ".pdf", "application/pdf");
+            using (LibraryContext db = new LibraryContext())
+            {
+                Record b = db.Records.Find(id);
+                return File("../../Data/" + b.RecordName + ".pdf", "application/pdf");
+            }
         }
 
         [HttpGet]
@@ -110,7 +119,7 @@ namespace Library.Controllers
         public ActionResult Add()
         {
             AdminAddEditModel model = new AdminAddEditModel();
-            model.Publishers = GetPublishersList();
+            model.Publishers = getPublishersList();
             return View(model);
         }
 
@@ -122,18 +131,18 @@ namespace Library.Controllers
             {
                 if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
                 {
-                    model.Publishers = GetPublishersList();
+                    model.Publishers = getPublishersList();
                     return View(model);
                 }
                 if (model.PublisherId != 0) // Воспользовались списком
                 {
                     int realPublisherId = model.PublisherId - 1;
                     Record newRecord = new Record();
-                    Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
-                    EditRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor, publisher);
+                    editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
                     db.SaveChanges();
-                    LoadPdf(newRecord.RecordName, fileUpload);
+                    loadPdf(newRecord.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 // Новое издательство. Валидация создаваемого издательства
@@ -143,19 +152,18 @@ namespace Library.Controllers
                 }
                 if (ModelState.IsValidField("PublisherName") && ModelState.IsValidField("PublisherEmail"))
                 {
-                    Publisher newPublisher = new Publisher();
-                    EditPublisher(newPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     Record newRecord = new Record();
-                    EditRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor, newPublisher);
+                    editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editPublisher(newRecord.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Records.Add(newRecord);
-                    db.Publishers.Add(newPublisher);
+                    db.Publishers.Add(newRecord.RecordPublisher);
                     db.SaveChanges();
-                    LoadPdf(newRecord.RecordName, fileUpload);
+                    loadPdf(newRecord.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 else
                 {
-                    model.Publishers = GetPublishersList();
+                    model.Publishers = getPublishersList();
                     return View(model);
                 }
             }
@@ -163,28 +171,20 @@ namespace Library.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult Edit(int? id)
+        [Route("records/edit/{id:int}")]
+        public ActionResult Edit(int id)
         {
-            int realId;
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(400, "Expected books id");
-            }
-            else
-            {
-                realId = (int)id;
-            }
             using (LibraryContext db = new LibraryContext())
             {
                 bool idIsValid = (from r in db.Records
-                                  select r.RecordId).Contains(realId);
+                                  select r.RecordId).Contains(id);
                 if (!idIsValid)
                 {
-                    return new HttpStatusCodeResult(404, "No book with such id: " + realId);
+                    return new HttpStatusCodeResult(404, "No book with such id: " + id);
                 }
                 AdminAddEditModel model = new AdminAddEditModel();
-                model.Publishers = GetPublishersList();
-                Record baseRecord = (from r in db.Records where r.RecordId == realId select r).First();
+                model.Publishers = getPublishersList();
+                Record baseRecord = (from r in db.Records where r.RecordId == id select r).First();
                 model.RecordName = baseRecord.RecordName;
                 model.RecordDescription = baseRecord.RecordDescription;
                 model.RecordAuthor = baseRecord.AuthorName;
@@ -201,7 +201,7 @@ namespace Library.Controllers
             {
                 if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
                 {
-                    model.Publishers = GetPublishersList();
+                    model.Publishers = getPublishersList();
                     return View(model);
                 }
                 if (model.PublisherId != 0) // Воспользовались списком
@@ -210,8 +210,8 @@ namespace Library.Controllers
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id
                                        select r).First();
-                    Publisher publisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
-                    EditRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor, publisher);
+                    editRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    recordQuery.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.SaveChanges();
                     /* todo: Load pdf here*/
                     return Redirect("/Records/Index");
@@ -223,22 +223,51 @@ namespace Library.Controllers
                 }
                 if (ModelState.IsValidField("PublisherName") && ModelState.IsValidField("PublisherEmail"))
                 {
-                    Publisher newPublisher = new Publisher();
-                    EditPublisher(newPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id
                                        select r).First();
-                    EditRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor, newPublisher);
-                    db.Publishers.Add(newPublisher);
+                    editRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editPublisher(recordQuery.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
+                    db.Publishers.Add(recordQuery.RecordPublisher);
                     db.SaveChanges();
                     /* todo: Load pdf here*/
                     return Redirect("/Records/Index");
                 }
                 else
                 {
-                    model.Publishers = GetPublishersList();
+                    model.Publishers = getPublishersList();
                     return View(model);
                 }
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("records/delete/{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                var recordToDelete = (from r in db.Records where r.RecordId == id select r).FirstOrDefault();
+                if (recordToDelete == null)
+                {
+                    return new HttpStatusCodeResult(404, "No book with such id: " + id);
+                }
+                else
+                {
+                    return View(new AdminDeletionModel(recordToDelete, recordToDelete.RecordPublisher));
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, AdminDeletionModel model)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                db.Records.Remove((from r in db.Records where r.RecordId == id select r).FirstOrDefault());
+                db.SaveChanges();
+                return Redirect("/Records/Index");
             }
         }
     }

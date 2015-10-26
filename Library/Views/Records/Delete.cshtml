@@ -1,0 +1,26 @@
+﻿@model Library.Models.AdminDeletionModel
+
+@{
+    ViewBag.Title = "Удаление книги";
+}
+
+<h2>Вы хотите удалить книгу?</h2>
+<form method="post">
+    <div>
+        <h4> Название книги: </h4>
+        @Model.record.RecordName <br>
+    </div>
+    <div>
+        <h4> Описание книги: </h4>
+        @Model.record.RecordDescription <br>
+    </div>
+    <div>
+        <h4> Автор книги: </h4>
+        @Model.record.AuthorName <br>
+    </div>
+    <div>
+        <h4> Имя издателя </h4>
+        @Model.publisher.PublisherName
+    </div>
+    <input type="submit" value="Удалить" />
+</form>

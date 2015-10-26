@@ -180,6 +180,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\AdminAddEditModel.cs" />
+    <Compile Include="Models\AdminDeletionModel.cs" />
     <Compile Include="Models\AdminLoginModel.cs" />
     <Compile Include="Models\DataBaseInitializer.cs" />
     <Compile Include="Models\LibraryContext.cs" />
@@ -209,6 +210,7 @@
     <Content Include="Views\Records\Edit.cshtml" />
     <Content Include="Views\Records\_Modal.cshtml" />
     <Content Include="Views\Admin\LogOff.cshtml" />
+    <Content Include="Views\Records\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
