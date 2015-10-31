@@ -1,0 +1,28 @@
+﻿@model Library.Models.Publisher
+@{
+    ViewBag.Title = "Информация об издательстве";
+}
+
+<div>
+    <h4>Издательство:</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <h5>
+            <label>Название:</label>
+            @Html.DisplayFor(model => model.PublisherName)
+        </h5>
+        <h5>
+            <label>Адрес:</label>
+            @Html.DisplayFor(model => model.Address)           
+        </h5>
+        <h5>
+            <label>Номер телефона:</label>
+            @Html.DisplayFor(model => model.Number)
+        </h5>
+        <h5>
+            <label>Email:</label>
+            @Html.DisplayFor(model => model.Email)
+        </h5>
+    </dl>
+</div>
+

@@ -17,8 +17,6 @@ namespace Library.Controllers
             return View();
         }
 
-        private LibraryContext db = new LibraryContext();
-
         public ActionResult Modal(int? id)
         {
             using (LibraryContext db = new LibraryContext())
