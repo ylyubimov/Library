@@ -26,7 +26,8 @@ namespace Library.Controllers
             }
         }
 
-        public ActionResult Publisher(int? id)
+        [Route("publishers/publisher/{id:int}")]
+        public ActionResult Publisher(int id)
         {
             using (LibraryContext db = new LibraryContext())
             {

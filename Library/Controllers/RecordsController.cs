@@ -42,7 +42,8 @@ namespace Library.Controllers
             }
         }
 
-        public ActionResult Record(int? id)
+        [Route("records/record/{id:int}")]
+        public ActionResult Record(int id)
         {
             using (LibraryContext db = new LibraryContext())
             {
