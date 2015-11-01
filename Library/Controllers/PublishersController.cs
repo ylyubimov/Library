@@ -15,7 +15,7 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 string a = Request["find"];
-                if (!String.IsNullOrEmpty(a))
+                if (!string.IsNullOrEmpty(a))
                 {
                     return View(db.Publishers.Where(s => s.PublisherName != null && s.PublisherName.Contains(a)).ToList());
                 }
@@ -37,6 +37,49 @@ namespace Library.Controllers
                     return HttpNotFound();
                 }
                 return View(b);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("publishers/delete/{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                Publisher publisher = db.Publishers.Find(id);
+                if (publisher == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(publisher);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, Publisher model)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                String linkedRecord = "";
+                foreach (var record in db.Records)
+                {
+                    if (record.PublisherId == id)
+                    {
+                        linkedRecord = record.RecordName;
+                    }
+                }
+                if (linkedRecord != "")
+                {
+                    ModelState.AddModelError("", "Этот издатель привязан к книге " + linkedRecord);
+                    return View(db.Publishers.Find(id));
+                }
+                else
+                {
+                    db.Publishers.Remove((from p in db.Publishers where p.PublisherId == id select p).FirstOrDefault());
+                    db.SaveChanges();
+                    return Redirect("/Publishers/Index");
+                }
             }
         }
 
