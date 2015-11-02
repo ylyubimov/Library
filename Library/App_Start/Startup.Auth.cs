@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Library.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using System;
 
 namespace Library
 {
@@ -13,7 +16,9 @@ namespace Library
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Admin/Login")
+                LoginPath = new PathString("/Admin/Login"),
+                SlidingExpiration = false,
+                ExpireTimeSpan = TimeSpan.FromMinutes(1)
             });
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);

@@ -1,5 +1,5 @@
 ﻿
-@model Library.Models.Admin
+@model Library.Models.AdminLoginModel
 @{
     ViewBag.Title = "Админ Админович";
 }
@@ -9,11 +9,11 @@
 <fieldset>
     <div align="center">
         <label>Имя</label>
-        @Html.TextBoxFor(model => model.UserName)
+        @Html.TextBoxFor(model => model.Login)
     </div>
     <div align="center">
         <label>Пароль</label>
-        @Html.TextBoxFor( model => model.PasswordHash)
+        @Html.TextBoxFor( model => model.Password)
     </div>
 </fieldset>
 @{Html.EndForm();}
