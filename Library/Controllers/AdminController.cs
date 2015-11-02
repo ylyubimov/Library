@@ -107,11 +107,11 @@ namespace Library.Controllers
                 return RedirectToAction("Index", "Admin");
             }
         }
-        
+
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return View();
+            return RedirectToLocal("");
         }
     }
 }

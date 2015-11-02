@@ -14,5 +14,8 @@ namespace Library.Models
     public class Admin : IdentityUser
     {
         public string Name { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
     }
 }
