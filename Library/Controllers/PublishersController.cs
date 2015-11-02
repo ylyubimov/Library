@@ -118,7 +118,7 @@ namespace Library.Controllers
                 {
                     var uniquePublisherQuery = (from t in db.Publishers
                                                 where t.PublisherName == model.PublisherName
-                                                select t);
+                                                select t).FirstOrDefault();
                     if (uniquePublisherQuery != null)
                     {
                         ModelState.AddModelError("PublisherName", "Издатель с таким названием уже существует");
