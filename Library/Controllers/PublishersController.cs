@@ -83,5 +83,59 @@ namespace Library.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("publishers/edit/{id:int}")]
+        public ActionResult Edit(int id)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                Publisher publisher = db.Publishers.Find(id);
+                if (publisher == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(new PublisherEditModel(publisher));
+            }
+        }
+
+        void editPublisher(Publisher publisher, PublisherEditModel model)
+        {
+            publisher.PublisherName = model.PublisherName;
+            publisher.Address = model.Address;
+            publisher.Number = model.Number;
+            publisher.Email = model.Email;
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, PublisherEditModel model)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                Publisher publisher = (from t in db.Publishers where t.PublisherId == id select t).FirstOrDefault();
+                string currentName = publisher.PublisherName;
+                if (model.PublisherName != currentName)
+                {
+                    var uniquePublisherQuery = (from t in db.Publishers
+                                                where t.PublisherName == model.PublisherName
+                                                select t);
+                    if (uniquePublisherQuery != null)
+                    {
+                        ModelState.AddModelError("PublisherName", "Издатель с таким названием уже существует");
+                    }
+                }
+                if (ModelState.IsValid)
+                {
+                    editPublisher(publisher, model);
+                    db.SaveChanges();
+                    return Redirect("/Publishers/Index");
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+        }
+
     }
 }
