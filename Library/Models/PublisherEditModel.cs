@@ -6,10 +6,17 @@ using System.Web;
 
 namespace Library.Models
 {
-    public class Publisher
+    public class PublisherEditModel
     {
-        [Key]
-        public int PublisherId { get; set; }
+        public PublisherEditModel() { }
+
+        public PublisherEditModel(Publisher publisher)
+        {
+            PublisherName = publisher.PublisherName;
+            Address = publisher.Address;
+            Number = publisher.Number;
+            Email = publisher.Email;
+        }
 
         [Required]
         public string PublisherName { get; set; }

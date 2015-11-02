@@ -21,24 +21,27 @@
                 </a>
                 <p><h5>@Html.DisplayFor(modelItem => item.RecordName)</h5></p>
                 <h3>Издательство:</h3>
-                <h3>@Html.DisplayFor(modelItem => item.RecordPublisher.PublisherName)</h3>
+                @{Library.Models.LibraryContext q = new Library.Models.LibraryContext();
+                    var publisher = (from p in q.Publishers where item.PublisherId == p.PublisherId select p).FirstOrDefault();
+                }
+                <h3>@Html.DisplayFor(modelItem => publisher.PublisherName)</h3>
                 @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.RecordName + ".pdf")))
                 {
                     @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
 
                 }
-
                 else
                 {
                     @Html.ActionLink("Хрен вам", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "disabled btn btn-danger" });
                 }
-            </div>
+            
                 <div id="container">
                     было
                 </div>
-                    @Ajax.ActionLink("Поменять данные", "Modal", "Records", new { id = item.RecordId }, new AjaxOptions { UpdateTargetId = "container" }, new { id = "update-container" })
-                    @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
-
-        }
+                @Ajax.ActionLink("Поменять данные", "Modal", "Records", new { id = item.RecordId }, new AjaxOptions { UpdateTargetId = "container" }, new { id = "update-container" })
+                @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
+                </div>
+         }
     </div>
+
  </div>

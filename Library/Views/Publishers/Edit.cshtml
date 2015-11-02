@@ -1,0 +1,34 @@
+﻿@model Library.Models.PublisherEditModel
+
+@{
+    ViewBag.Title = "Редактирование информации об издательстве";
+}
+
+<h2>Изменение информации об издательстве</h2>
+
+@{Html.BeginForm();}
+<fieldset>
+    @Html.ValidationSummary(true)
+    <div class="editor-field">
+        <label>Название:</label>
+        @Html.TextBoxFor(model => model.PublisherName)
+        @Html.ValidationMessageFor(model => model.PublisherName)
+    </div>
+    <div class="editor-field">
+        <label>Адрес:</label>
+        @Html.TextBoxFor(model => model.Address)
+        @Html.ValidationMessageFor(model => model.Address)
+    </div>
+    <div class="editor-field">
+        <label>Телефон:</label>
+        @Html.TextBoxFor(model => model.Number)
+        @Html.ValidationMessageFor(model => model.Number)
+    </div>
+    <div>
+        <label>Email:</label>
+        @Html.TextBoxFor(model => model.Email)
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+    <input type="submit" value="Изменить!" />
+</fieldset>
+@{Html.EndForm();}

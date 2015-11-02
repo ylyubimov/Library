@@ -1,0 +1,27 @@
+﻿@model Library.Models.Publisher
+
+@{
+    ViewBag.Title = "Удаление издательства";
+}
+
+<h2>Вы хотите удалить издательство?</h2>
+<form method="post">
+    @Html.ValidationSummary(true)
+    <div>
+        <h4> Название: </h4>
+        @Model.PublisherName <br>
+    </div>
+    <div>
+        <h4> Адрес: </h4>
+        @Model.Address <br>
+    </div>
+    <div>
+        <h4> Телефон: </h4>
+        @Model.Number <br>
+    </div>
+    <div>
+        <h4> Email: </h4>
+        @Model.Email
+    </div>
+    <input type="submit" value="Удалить" />
+</form>
