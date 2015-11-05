@@ -1,5 +1,6 @@
 ﻿body {
     padding-bottom: 20px;
+    background-color: #F5E3CB;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -41,37 +42,82 @@ input[type="checkbox"].input-validation-error {
 }
 
 .blur {
-/* firefox uses SVG filters */
-filter: url(#A);
-/* IE specific */
-filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=10);
-
--webkit-filter: blur(5px);
--moz-filter: blur(5px);
--ms-filter: blur(5px);
--o-filter: blur(5px);
-filter: blur(5px);
-
-color: #666;
 }
 
 .blur:hover {
-/* firefox uses SVG filters */
-filter: url(#B);
-/* IE specific */
-filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=10);
-
--webkit-filter: blur(0px);
--moz-filter: blur(0px);
--ms-filter: blur(0px);
--o-filter: blur(0px);
-filter: blur(0px);
-
-color: #000;
 }
 
 a.disabled {
     pointer-events: none; /* делаем ссылку некликабельной */
     cursor: default;  /* устанавливаем курсор в виде стрелки */
     color: #999; /* цвет текста для нективной ссылки */
+}
+
+h1 {
+    font-size: 35px;
+}
+
+h2 {
+    font-size: 25px;
+    color: #666;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h2 a {
+    color: #444;
+    text-decoration: underline;
+    text-shadow: 1px 1px 0 #E5D4C0;
+}
+
+h2 a:hover, h2 a:visited:hover {
+    color: #777;
+    text-decoration: none;
+}
+
+h2 a:visited {
+    color: #8d7054;
+}
+
+.library-index{
+    display: block;
+    text-align: center;
+    text-shadow: 4px 2px 0 #E5D4C0;
+    color: #5c3f12
+}
+
+.btn-danger{
+    background-image: linear-gradient(#ac673a, #752b12);
+    border-color: #551d0b !important;
+}
+
+.btn-success{
+    background-image: linear-gradient(#ffecbd, #c79b81);
+    border-color: #999 !important;
+}
+
+.btn-success:hover{
+    background:linear-gradient(#ffecbd, #E5D4C0);
+    border-color: #999 !important;
+}
+
+a:not(disabled){
+    color: #222 !important;
+}
+
+
+a.disabled{
+    color: #999 !important;
+}
+
+.book{
+    position: relative;
+}
+
+.publisher{
+    position: relative;
+    margin-left: 10px;
+    font-size: 25px;
 }
