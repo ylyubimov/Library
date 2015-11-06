@@ -1,28 +1,32 @@
 ﻿@model Library.Models.AdminLoginModel
 @{
-    ViewBag.Title = "ВОЙДИТЕ";
+    ViewBag.Title = "Вход для администратора";
 }
 
-<h2>Логинимся, ребята</h2>
-@{Html.BeginForm();}
-<fieldset>
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-    <div class="editor-field">
-        <label>Логин</label>
-        @Html.TextBoxFor(admin => admin.Login)
-        @Html.ValidationMessageFor(admin => admin.Login)
+<div class="login-password">
+    <h2>Введите логин и пароль</h2>
+    <div class="view">
+        @{Html.BeginForm();}
+        <fieldset>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="editor-field">
+                <label>
+                    Логин
+                    @Html.TextBoxFor(admin => admin.Login, new { @id = "login" })
+                </label>
+                @Html.ValidationMessageFor(admin => admin.Login)
+            </div>
+            <div class="editor-field">
+                <label>
+                    Пароль
+                    @Html.TextBoxFor(admin => admin.Password, new { @id = "password", @type = "password" })
+                </label>
+                @Html.ValidationMessageFor(admin => admin.Password)
+            </div>
+            <input type="submit" value="Войти" class="btn btn-success" />
+        </fieldset>
+        @{Html.EndForm();}
     </div>
-    <div class="editor-field">
-        <label>Пароль</label>
-        @Html.TextBoxFor(admin => admin.Password)
-        @Html.ValidationMessageFor(admin => admin.Password)
-    </div>   
-    <div class="editor-field">
-        <label>Запомнить</label>
-        @Html.CheckBoxFor(admin => admin.RememberMe)
-        @Html.ValidationMessageFor(admin => admin.RememberMe)
-    </div>   
-    <input type="submit" value="GO ON" />
-</fieldset>
-@{Html.EndForm();}
+
+</div>

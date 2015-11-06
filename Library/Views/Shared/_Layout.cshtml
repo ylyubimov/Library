@@ -25,6 +25,10 @@
 
 <body>
     <nav>
+        <a href="~/Records/Index" class="logo">
+            <div class="icon">
+            </div>
+        </a>
         @if (User.Identity.IsAuthenticated)
         {
             @Html.AntiForgeryToken();

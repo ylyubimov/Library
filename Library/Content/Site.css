@@ -112,7 +112,7 @@ a.disabled{
     color: #999 !important;
 }
 
-.book{
+.view{
     position: relative;
     width: 70%;
     background-color: rgba(241, 196, 15, 0.1);
@@ -153,8 +153,8 @@ nav a{
 }
 
 .search input[type="search"]{
-    max-width: 500px;
-    width: 400px;
+    max-width: 800px;
+    width: 40%;
     height: 30px;
 
     background: #fefbf6;
@@ -169,4 +169,78 @@ nav a{
     position:relative;
     margin-top: -30px;
     margin-left: 25%;
+}
+
+.icon {
+    position: absolute;
+    top: 7px;
+    left: 20px;
+    width: 64px;
+    height: 64px;
+    content: '';
+    background: url(/Content/books78.png);
+    background-repeat: no-repeat;
+}
+
+.logo{
+    margin-top: 0px;
+}
+
+#login{
+    left: 22px;
+}
+
+#password{
+    left: 8px;
+}
+
+#login, #password{
+    position: relative;
+    top: 0px; 
+    background: #fefbf6;
+    border: 1px solid #e1b9ac;
+    font-size: 15px;
+    border-radius: 5px;
+    padding-left: 7px;
+}
+
+.login-password label{
+    font-weight: normal;
+    font-size: 17px;
+}
+
+.login-password h2{
+    display: block;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 5px;
+    color: #111;
+    text-shadow: 1px 1px 1px rgba(99, 99, 99, 0.4);
+}
+
+.login-password .view{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
+
+.editor-field{
+    display: block;
+    padding-left: 20px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-password input[type = submit]{
+    display: block;
+    width: 80px;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
 }
