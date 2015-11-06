@@ -1,6 +1,7 @@
 ﻿body {
     padding-bottom: 20px;
-    background-color: #F5E3CB;
+    background-color: #f8ead7;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAMAAAApB0NrAAAABlBMVEX///+pqalTpKl9AAAAAnRSTlMAGovxNEIAAAAdSURBVDjLY2AAAUaG4UYxDDsfjfp91O+jfqfE7wCzpQCw/dq+qQAAAABJRU5ErkJggg==");
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -89,24 +90,23 @@ h2 a:visited {
 }
 
 .btn-danger{
-    background-image: linear-gradient(#ac673a, #752b12);
+    background-image: none !important;
+    background-color: #c76e66 !important;
     border-color: #551d0b !important;
 }
 
 .btn-success{
-    background-image: linear-gradient(#ffecbd, #c79b81);
-    border-color: #999 !important;
+    background-image: none;
+    background-color: #f6ac75 !important;
+    border-color: #c79b81 !important;
+    color: #222 !important;
+    box-shadow: rgba(0,0,0,0.4) 1px 2px 2px;
 }
 
 .btn-success:hover{
-    background:linear-gradient(#ffecbd, #E5D4C0);
-    border-color: #999 !important;
+    background: #dd724e !important;
+    border-color: #dd724e !important;
 }
-
-a:not(disabled){
-    color: #222 !important;
-}
-
 
 a.disabled{
     color: #999 !important;
@@ -114,10 +114,59 @@ a.disabled{
 
 .book{
     position: relative;
+    width: 70%;
+    background-color: rgba(241, 196, 15, 0.1);
+    box-shadow: 0 0 3px #ccc;
+    border-radius: 5px;
+    padding-bottom: 50px;
 }
 
 .publisher{
     position: relative;
     margin-left: 10px;
     font-size: 25px;
+}
+
+nav{
+    height: 80px;
+    background-color: #f6d082;
+    box-shadow: 0 0 5px 0 #333;
+}
+
+nav a{
+    position: relative;
+    display: block;
+    margin-top: 20px;
+}
+
+.item{
+    display: block;
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logging {
+    position:relative;
+    width: 80px;
+    margin-left: 70%;
+}
+
+.search input[type="search"]{
+    max-width: 500px;
+    width: 400px;
+    height: 30px;
+
+    background: #fefbf6;
+    border: 1px solid #c28157;
+    font-size: 20px;
+    float: left;
+    color: #222;
+    padding-left: 15px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position:relative;
+    margin-top: -30px;
+    margin-left: 25%;
 }

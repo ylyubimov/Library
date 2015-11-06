@@ -24,19 +24,25 @@
 </head>
 
 <body>
-    <header>
-        @using Library.Controllers
+    <nav>
         @if (User.Identity.IsAuthenticated)
         {
             @Html.AntiForgeryToken();
-            @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success" });
+            @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
             //@Html.Action("LogOff");
         }
         else
             {
-                @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success" });
+                @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
             }
-    </header>
+        @using (Html.BeginForm())
+        {
+            <div class="search">
+                <input type="search" placeholder="Поиск..." />
+            </div>
+        } 
+
+    </nav>
 @RenderBody()
         <hr>
         <footer>
