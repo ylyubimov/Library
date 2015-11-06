@@ -1,21 +1,20 @@
 ﻿
 @model Library.Models.AdminLoginModel
 @{
-    ViewBag.Title = "Админ Админович";
+    ViewBag.Title = "Админка";
 }
 
-<h2 align="center">Our Admin:</h2>
-@{Html.BeginForm();}
-<fieldset>
-    <div align="center">
-        <label>Имя</label>
-        @Html.TextBoxFor(model => model.Login)
-    </div>
-    <div align="center">
-        <label>Пароль</label>
-        @Html.TextBoxFor( model => model.Password)
-    </div>
-</fieldset>
-@{Html.EndForm();}
-
-
+<h2> Управление библиотекой </h2>
+<div class="view admin">
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+    <a href="Records/Add"><div class="btn btn-success">Добавить книгу</div></a>
+</div>

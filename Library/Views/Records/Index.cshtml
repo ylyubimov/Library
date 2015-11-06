@@ -37,7 +37,6 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
-                        <p><a class="btn btn-primary btn-lg" href="Records/Add" role="button">Перейти к добавлению книг &raquo;</a></p>
                     }
                 </div>
             </div>

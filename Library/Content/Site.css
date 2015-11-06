@@ -209,7 +209,7 @@ nav a{
     font-size: 17px;
 }
 
-.login-password h2{
+h2{
     display: block;
     width: 300px;
     margin-left: auto;
@@ -243,4 +243,20 @@ nav a{
     margin-top: 5px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.admin{
+    display: block;
+    padding-top: 10px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.admin div {
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
 }
