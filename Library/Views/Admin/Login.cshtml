@@ -13,14 +13,14 @@
             <div class="editor-field">
                 <label>
                     Логин
-                    @Html.TextBoxFor(admin => admin.Login, new { @id = "login" })
+                    @Html.TextBoxFor(admin => admin.Login, new { @class = "input-field" })
                 </label>
                 @Html.ValidationMessageFor(admin => admin.Login)
             </div>
             <div class="editor-field">
                 <label>
                     Пароль
-                    @Html.TextBoxFor(admin => admin.Password, new { @id = "password", @type = "password" })
+                    @Html.TextBoxFor(admin => admin.Password, new { @class = "input-field", @type = "password" })
                 </label>
                 @Html.ValidationMessageFor(admin => admin.Password)
             </div>

@@ -108,17 +108,39 @@ h2 a:visited {
     border-color: #dd724e !important;
 }
 
+.file-upload {
+    position: relative;
+    overflow: hidden;
+}
+
+.upload{ 
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+}
+
 a.disabled{
     color: #999 !important;
 }
 
 .view{
     position: relative;
-    width: 70%;
+    width: 60%;
     background-color: rgba(241, 196, 15, 0.1);
     box-shadow: 0 0 3px #ccc;
     border-radius: 5px;
     padding-bottom: 50px;
+    padding-top: 10px;
+}
+
+.view h3{
+    margin-left: 40%;
+    margin-bottom: 20px;
 }
 
 .publisher{
@@ -152,7 +174,7 @@ nav a{
     margin-left: 70%;
 }
 
-.search input[type="search"]{
+input[type="search"]{
     max-width: 800px;
     width: 40%;
     height: 30px;
@@ -186,15 +208,7 @@ nav a{
     margin-top: 0px;
 }
 
-#login{
-    left: 22px;
-}
-
-#password{
-    left: 8px;
-}
-
-#login, #password{
+.input-field, .dropdown{
     position: relative;
     top: 0px; 
     background: #fefbf6;
@@ -202,11 +216,17 @@ nav a{
     font-size: 15px;
     border-radius: 5px;
     padding-left: 7px;
+    float: right;
+    width: 200px;
+    height: 26px;
+    margin-top: 0px;
 }
 
-.login-password label{
+label{
     font-weight: normal;
     font-size: 17px;
+    text-align: center;
+    display: block;
 }
 
 h2{
@@ -220,10 +240,6 @@ h2{
 }
 
 .login-password .view{
-    width: 50%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
     padding-top: 10px;
     margin-top: 10px;
     padding-bottom: 20px;
@@ -231,32 +247,39 @@ h2{
 
 .editor-field{
     display: block;
+    position: relative;
     padding-left: 20px;
-    width: 300px;
+    width: 350px;
     margin-left: auto;
     margin-right: auto;
 }
+.file-upload{
+    float: left;
+    clear: both;
+    left: 80%;
+}
 
-.login-password input[type = submit]{
+.file-upload, input[type = submit]{
     display: block;
-    width: 80px;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .admin{
-    display: block;
-    padding-top: 10px;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
+    padding-top: 20px;
 }
 
 .admin div {
-    display: block;
-    width: 200px;
+    width: 170px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
+}
+
+.view{
+    width: 70%; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
