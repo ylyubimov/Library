@@ -58,6 +58,10 @@ h1 {
     font-size: 35px;
 }
 
+.header{
+    text-align: center;
+}
+
 h2 {
     font-size: 25px;
     color: #666;
@@ -163,9 +167,17 @@ nav a{
 
 .item{
     display: block;
-    width: 250px;
-    margin-left: auto;
+    margin-left: 20%;
     margin-right: auto;
+}
+
+.mini-box .title{
+    display: block;
+}
+
+.title h2{
+    height: 30px;
+    text-overflow: ellipsis;
 }
 
 .logging {
@@ -231,7 +243,6 @@ label{
 
 h2{
     display: block;
-    width: 300px;
     margin-left: auto;
     margin-right: auto;
     padding-top: 5px;
@@ -253,6 +264,7 @@ h2{
     margin-left: auto;
     margin-right: auto;
 }
+
 .file-upload{
     float: left;
     clear: both;

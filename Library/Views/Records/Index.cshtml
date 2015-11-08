@@ -8,8 +8,8 @@
 <div class="container view">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 col-sm-6">   
-                <div class="mini-box item">
+            <div class="col-md-3 col-sm-6">   
+                <div class="mini-box item title">
                     <h2>
                         @Html.ActionLink(item.RecordName, "Record/" + item.RecordId)
                     </h2>
