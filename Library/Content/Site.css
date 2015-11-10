@@ -192,7 +192,7 @@ nav a{
     margin-left: 70%;
 }
 
-input[type="search"]{
+.searchBox{
     max-width: 800px;
     width: 40%;
     height: 30px;

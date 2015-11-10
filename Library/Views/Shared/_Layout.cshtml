@@ -38,13 +38,10 @@
         else
             {
                 @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
-            }
-        @using (Html.BeginForm())
-        {
-            <div class="search">
-                <input type="search" placeholder="Поиск..." />
-            </div>
-        } 
+            } 
+        @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
+            @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
+        @{Html.EndForm();} 
 
     </nav>
 @RenderBody()
