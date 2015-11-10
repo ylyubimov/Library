@@ -48,6 +48,11 @@
                     {
                         @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
                     }
+                    <div id="container">
+                        est
+                    </div>
+
+                    @Ajax.ActionLink("Поменять данные", "Test", "Records", new { }, new AjaxOptions { UpdateTargetId = "container" }, new { id = "update-container" })             
                 </div>
             </div>
         }
