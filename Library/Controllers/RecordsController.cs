@@ -106,7 +106,7 @@ namespace Library.Controllers
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
                 file.SaveAs(System.IO.Path.Combine(path, name + ".pdf"));
                 System.IO.Directory.SetCurrentDirectory(path);
-                GhostscriptSharp.GhostscriptWrapper.GeneratePageThumb(name+".pdf", name+".png", 1, 100, 100);
+                GhostscriptSharp.GhostscriptWrapper.GeneratePageThumb(name + ".pdf", name + ".png", 1, 100, 100);
             }
         }
 
