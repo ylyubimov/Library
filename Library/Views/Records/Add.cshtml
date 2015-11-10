@@ -5,7 +5,7 @@
 
 <h2>Добавление новой книги</h2>
 <div class="view">
-    @{Html.BeginForm();}
+    @{Html.BeginForm("Add", "Records", FormMethod.Post, new { enctype = "multipart/form-data" });}
     <fieldset>
         @Html.ValidationSummary(true)
         <div class="editor-field">
@@ -98,7 +98,7 @@
         </div>
         <div class="btn btn-success file-upload">
             <span>Файл</span>
-            <input type="file" class="upload"/>
+            <input type="file" name="fileUpload" class="upload" />
         </div>
         <input type="submit" value="Отправить" class="btn btn-success" />
     </fieldset>
