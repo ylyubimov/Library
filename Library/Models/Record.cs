@@ -14,6 +14,9 @@ namespace Library.Models
         public int RecordId { get; set; }
 
         [Required]
+        public string ISBN { get; set; }
+
+        [Required]
         public string RecordName { get; set; }
 
         public string RecordDescription { get; set; }
@@ -21,9 +24,15 @@ namespace Library.Models
         [Required]
         public string AuthorName { get; set; }
 
+        public string NumberOfPages { get; set; }
+
+        public string CreationDate { get; set; }
+
+        public string Annotation { get; set; }
+
         public int PublisherId { get; set; }
 
         [ForeignKey("PublisherId")]
-        public virtual Publisher RecordPublisher { get; set; } 
+        public virtual Publisher RecordPublisher { get; set; }
     }
 }

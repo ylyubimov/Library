@@ -29,7 +29,34 @@
             </label>
             @Html.ValidationMessageFor(model => model.RecordAuthor)
         </div>
-        <div>
+        <div class="editor-field">
+            <label>
+                ISBN
+                @Html.TextBoxFor(model => model.ISBN, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.ISBN, " ")
+        </div>
+        <div class="editor-field">
+            <label>
+                Дата создания
+                @Html.TextBoxFor(model => model.CreationDate, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.CreationDate, " ")
+        </div>
+        <div class="editor-field">
+            <label>
+                Кол-во страниц
+                @Html.TextBoxFor(model => model.NumberOfPages, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.NumberOfPages, " ")
+        </div>
+        <div class="editor-field">
+            <label>
+                Аннотация
+                @Html.TextBoxFor(model => model.Annotation, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.Annotation, " ")
+        </div>
         <div class="editor-field">
             <label>
                 Издательство
@@ -37,7 +64,7 @@
             </label>
             @Html.ValidationMessageFor(model => Model.Publishers)
         </div>
-</div>
+
         <div>
             <br>
             <h3>Добавить новое издательство:</h3>
