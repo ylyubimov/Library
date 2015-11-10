@@ -20,6 +20,15 @@ namespace Library.Models
         [Required]
         public string RecordName { get; set; }
 
+        [Required]
+        public string ISBN { get; set; }
+
+        public string NumberOfPages { get; set; }
+
+        public string CreationDate { get; set; }
+
+        public string Annotation { get; set; }
+
         public string RecordDescription { get; set; }
 
         [Required]
