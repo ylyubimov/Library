@@ -63,12 +63,15 @@ h1 {
 }
 
 h2 {
+    display: block;
+    text-align: center;
     font-size: 25px;
     color: #666;
 }
 
 h3 {
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 h2 a {
@@ -175,9 +178,12 @@ nav a{
     display: block;
 }
 
-.title h2{
+.title h2 a{
+    display: block;
     height: 30px;
+    overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .logging {
@@ -294,4 +300,15 @@ h2{
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.record-field{
+    display: block;
+    margin-top: 16px;
+}
+
+.row .btn{
+    display: block;
+    margin-left: 38%;
+    width: 100px;
 }

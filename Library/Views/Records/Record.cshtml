@@ -1,31 +1,82 @@
 ﻿@model Library.Models.Record
 
-    <div>
-        <h4>Record</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <label> Название: </label>
-            <h5>@Html.DisplayFor(model => model.RecordName)</h5>
-            <label> Описание: </label>
-            <h5>@Html.DisplayFor(model => model.RecordDescription)</h5>
-            <label> Автор: </label>
-            <h5>@Html.DisplayFor(model => model.AuthorName)</h5>
-            <label> ISBN: </label>
-            <h5>@Html.DisplayFor(model => model.ISBN)</h5>
-            <label> Дата создания: </label>
-            <h5>@Html.DisplayFor(model => model.CreationDate)</h5>
-            <label> Количество страниц: </label>
-            <h5>@Html.DisplayFor(model => model.NumberOfPages)</h5>
-            <label> Аннотация: </label>
-            <h5>@Html.DisplayFor(model => model.Annotation)</h5>
-                @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.RecordName + ".pdf")))
-                {
-                    @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
-                }
-                else
-                {
-                    @Html.ActionLink("Хрен вам", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "disabled btn btn-danger" })
-                }
-        </dl>
+<h2>Информация о книге</h2>
+<div class="view">
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Название:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.RecordName)
+        </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Описание:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.RecordDescription)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Автор:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.AuthorName)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>ISBN:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.ISBN)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Дата создания:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.CreationDate)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Количество страниц:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.NumberOfPages)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Аннотация:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.Annotation)
+        </div>
+    </div>
+    <div class="download row">
+        @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.RecordName + ".pdf")))
+        {
+            <div class="col-md-3 col-sm-3">
+                @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
+            </div>
+        }
+        else
+        {
+            <div class="col-md-3 col-sm-3">
+                @Html.ActionLink("Недоступно", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "disabled btn btn-danger" })
+            </div>
+        }
+    </div>
+</div>
 

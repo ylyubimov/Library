@@ -18,7 +18,7 @@ namespace Library
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Admin/Login"),
                 SlidingExpiration = false,
-                ExpireTimeSpan = TimeSpan.FromMinutes(1)
+                ExpireTimeSpan = TimeSpan.FromMinutes(120)
             });
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
