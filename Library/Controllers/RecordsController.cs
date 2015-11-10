@@ -72,11 +72,15 @@ namespace Library.Controllers
         }
 
         [Authorize]
-        private void editRecord(Record record, string name, string description, string author)
+        private void editRecord(Record record, AdminAddEditModel model)
         {
-            record.RecordName = name;
-            record.RecordDescription = description;
-            record.AuthorName = author;
+            record.RecordName = model.RecordName;
+            record.RecordDescription = model.RecordDescription;
+            record.AuthorName = model.RecordAuthor;
+            record.ISBN = model.ISBN;
+            record.NumberOfPages = model.NumberOfPages;
+            record.Annotation = model.Annotation;
+            record.CreationDate = model.CreationDate;
         }
 
         [Authorize]
@@ -128,7 +132,7 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !ModelState.IsValidField("ISBN"))
                 {
                     model.Publishers = getPublishersList();
                     return View(model);
@@ -138,7 +142,7 @@ namespace Library.Controllers
                     int realPublisherId = model.PublisherId - 1;
                     Record newRecord = new Record();
                     newRecord.RecordPublisher = new Publisher();
-                    editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editRecord(newRecord, model);
                     newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
                     db.SaveChanges();
@@ -154,7 +158,7 @@ namespace Library.Controllers
                 {
                     Record newRecord = new Record();
                     newRecord.RecordPublisher = new Publisher();
-                    editRecord(newRecord, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editRecord(newRecord, model);
                     editPublisher(newRecord.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Records.Add(newRecord);
                     db.Publishers.Add(newRecord.RecordPublisher);
@@ -190,6 +194,10 @@ namespace Library.Controllers
                 model.RecordDescription = baseRecord.RecordDescription;
                 model.RecordAuthor = baseRecord.AuthorName;
                 model.PublisherId = baseRecord.PublisherId + 1;
+                model.Annotation = baseRecord.Annotation;
+                model.CreationDate = baseRecord.CreationDate;
+                model.ISBN = baseRecord.ISBN;
+                model.NumberOfPages = baseRecord.NumberOfPages;
                 return View(model);
             }
         }
@@ -200,7 +208,7 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor"))
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !ModelState.IsValidField("ISBN"))
                 {
                     model.Publishers = getPublishersList();
                     return View(model);
@@ -211,7 +219,7 @@ namespace Library.Controllers
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id
                                        select r).First();
-                    editRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editRecord(recordQuery, model);
                     recordQuery.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.SaveChanges();
                     /* todo: Load pdf here*/
@@ -227,7 +235,7 @@ namespace Library.Controllers
                     var recordQuery = (from r in db.Records
                                        where r.RecordId == id
                                        select r).First();
-                    editRecord(recordQuery, model.RecordName, model.RecordDescription, model.RecordAuthor);
+                    editRecord(recordQuery, model);
                     editPublisher(recordQuery.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Publishers.Add(recordQuery.RecordPublisher);
                     db.SaveChanges();
