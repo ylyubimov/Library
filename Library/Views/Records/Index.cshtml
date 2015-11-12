@@ -3,13 +3,6 @@
     <h1 class="library-index">
         Здесь собраны все книги нашей библиотеки.
     </h1>
-    <div align="center">
-        @if (User.Identity.IsAuthenticated)
-        {
-            @Html.ActionLink("Добавить новую книгу", "Add", "Records", new { @class = "btn btn-success" })
-        }
-    </div>
-    <br>
 </div>
 
 <div class="container view">
@@ -58,4 +51,12 @@
                 </div>
             </div>
         }
+</div>
+
+<div align="center">
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.ActionLink("Добавить новую книгу", "Add", "Records", new { @class = "btn btn-success" })
+    }
+    @Html.ActionLink("Издательства", "Index", "Publishers", null, new { @class = "btn btn-success" })
 </div>
