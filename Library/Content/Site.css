@@ -312,3 +312,15 @@ h2{
     margin-left: 38%;
     width: 100px;
 }
+
+.modal {
+    position: fixed;
+    top: 10%;
+    right: 30%;
+    bottom: 0;
+    left: 30%;
+    z-index: 1040;
+    display: none;
+    overflow: auto;
+    overflow-y: auto;
+}

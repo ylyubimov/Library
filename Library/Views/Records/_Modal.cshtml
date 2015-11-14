@@ -1,1 +1,62 @@
-﻿test
+﻿@model Library.Models.Record
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Html.DisplayFor(model => model.RecordName)
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Название:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.RecordName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Описание:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.RecordDescription)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Автор:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.AuthorName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>ISBN:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.ISBN)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Дата создания:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.CreationDate)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Количество страниц:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.NumberOfPages)
+            </div>
+        </div>
+    </div>
+</div>
