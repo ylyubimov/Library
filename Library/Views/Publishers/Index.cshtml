@@ -3,16 +3,24 @@
 }
 
 @model IEnumerable<Library.Models.Publisher>
-<div class="container">
+<div>
+    <h1 class="library-index">
+        Список издателей.
+    </h1>
+</div>
+
+<div class="container view">
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <h2>
-                    @Html.ActionLink(item.PublisherName, "Publisher/" + item.PublisherId)
-                </h2>             
-                <p><h5>@Html.DisplayFor(modelItem => item.PublisherName)</h5></p>
-                <p><h5>@Html.DisplayFor(modelItem => item.Address)</h5></p>
+            <div class="col-md-3 col-sm-6">
+                <div class="title">
+                    <h2>
+                        @Html.ActionLink(item.PublisherName, "Publisher/" + item.PublisherId)
+                    </h2>
+                </div>
+                <h4 class="header">@Html.DisplayFor(modelItem => item.PublisherName)</h4>
+                <h4 class="header">@Html.DisplayFor(modelItem => item.Address)</h4>
             </div>
         }
     </div>
