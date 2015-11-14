@@ -25,9 +25,15 @@ namespace Library.Controllers
                 return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
             }
         }
-
+        [HttpGet]
+        public ActionResult Test()
+        {
+            return PartialView("_Modal");        
+        }
         public ActionResult Index()
         {
+            if (Request.IsAjaxRequest())
+                return PartialView("_Modal");
             using (LibraryContext db = new LibraryContext())
             {
                 String a = Request["find"];

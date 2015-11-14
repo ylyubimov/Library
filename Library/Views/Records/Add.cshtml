@@ -64,43 +64,45 @@
             </label>
             @Html.ValidationMessageFor(model => Model.Publishers, " ")
         </div>
-        <div>
-            <br>
-            <h3>Новое издательство:</h3>
+        <div id="newPublisher">
+            <div>
+                <br>
+                <h3>Новое издательство:</h3>
+            </div>
+            <div class="editor-field">
+                <label>
+                    Название
+                    @Html.TextBoxFor(model => model.PublisherName, new { @class = "input-field" })
+                </label>
+                @Html.ValidationMessageFor(model => model.PublisherName, " ")
+            </div>
+            <div class="editor-field">
+                <label>
+                    Адрес
+                    @Html.TextBoxFor(model => model.PublisherAddress, new { @class = "input-field" })
+                </label>
+                @Html.ValidationMessageFor(model => model.PublisherAddress, " ")
+            </div>
+            <div class="editor-field">
+                <label>
+                    Телефон
+                    @Html.TextBoxFor(model => model.PublisherNumber, new { @class = "input-field" })
+                </label>
+                @Html.ValidationMessageFor(model => model.PublisherNumber, " ")
+            </div>
+            <div class="editor-field">
+                <label>
+                    Email
+                    @Html.TextBoxFor(model => model.PublisherEmail, new { @class = "input-field" })
+                </label>
+                @Html.ValidationMessageFor(model => model.PublisherEmail, " ")
+            </div>
         </div>
-        <div class="editor-field">
-            <label>
-                Название
-                @Html.TextBoxFor(model => model.PublisherName, new { @class = "input-field" })
-            </label>
-            @Html.ValidationMessageFor(model => model.PublisherName, " ")
-        </div>
-        <div class="editor-field">
-            <label>
-                Адрес
-                @Html.TextBoxFor(model => model.PublisherAddress, new { @class = "input-field" })
-            </label>
-            @Html.ValidationMessageFor(model => model.PublisherAddress, " ")
-        </div>
-        <div class="editor-field">
-            <label>
-                Телефон
-                @Html.TextBoxFor(model => model.PublisherNumber, new { @class = "input-field" })
-            </label>
-            @Html.ValidationMessageFor(model => model.PublisherNumber, " ")
-        </div>
-        <div class="editor-field">
-            <label>
-                Email
-                @Html.TextBoxFor(model => model.PublisherEmail, new { @class = "input-field" })
-            </label>
-            @Html.ValidationMessageFor(model => model.PublisherEmail, " ")
-        </div>
-        <div class="btn btn-success file-upload">
-            <span>Файл</span>
-            <input type="file" name="fileUpload" class="upload" />
-        </div>
-        <input type="submit" value="Сохранить" class="btn btn-success" />
+            <div class="btn btn-success file-upload">
+                <span>Файл</span>
+                <input type="file" name="fileUpload" class="upload" />
+            </div>
+            <input type="submit" value="Отправить" class="btn btn-success" />
     </fieldset>
     @{Html.EndForm();}
 </div>
