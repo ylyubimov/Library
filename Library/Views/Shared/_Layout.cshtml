@@ -33,11 +33,12 @@
         {
             @Html.AntiForgeryToken();
             @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
+            @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
             //@Html.Action("LogOff");
         }
         else
-            {
-                @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
+        {
+            @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
             } 
         @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
             @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
@@ -56,15 +57,5 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-    <script type="text/javascript">
-        $("#myLink").click(function(e){
-
-            e.preventDefault();
-            //$.ajax({
-            //    url:$(this).attr("href")})
-            //    .done(function(){alert("Value Added");})
-        });
-    </script>
 </body>
 </html>

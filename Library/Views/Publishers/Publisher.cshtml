@@ -3,27 +3,43 @@
     ViewBag.Title = "Информация об издательстве";
 }
 
-<div>
-    <h4>Издательство:</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <h5>
-            <label>Название:</label>
+<h2>Информация об издательстве</h2>
+<div class="container view">
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Название:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
             @Html.DisplayFor(model => model.PublisherName)
-        </h5>
-        <h5>
-            <label>Адрес:</label>
-            @Html.DisplayFor(model => model.Address)           
-        </h5>
-        <h5>
-            <label>Номер телефона:</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Адрес:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
+            @Html.DisplayFor(model => model.Address)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>Телефон:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
             @Html.DisplayFor(model => model.Number)
-        </h5>
-        <h5>
-            <label>Email:</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-3">
+            <h3>E-mail:</h3>
+        </div>
+        <div class="col-md-9 col-sm-9 record-field">
             @Html.DisplayFor(model => model.Email)
-        </h5>
-        <div>
+        </div>
+    </div>
             <h4 align="center">Список книг, опубликованных издательством:</h4>
             @{Library.Models.LibraryContext db = new Library.Models.LibraryContext();
                 var records = (from r in db.Records where r.PublisherId == Model.PublisherId select r);
@@ -65,7 +81,5 @@
                     </div>
                 </div>
             }
-        </div>
-    </dl>
 </div>
 
