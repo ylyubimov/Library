@@ -137,12 +137,15 @@ a.disabled{
 
 .view{
     position: relative;
-    width: 60%;
     background-color: rgba(241, 196, 15, 0.1);
     box-shadow: 0 0 3px #ccc;
     border-radius: 5px;
-    padding-bottom: 50px;
-    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-top: 15px;
+    width: 70%; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .view h3{
@@ -270,12 +273,13 @@ h2{
     width: 350px;
     margin-left: auto;
     margin-right: auto;
+    padding-bottom: 2px;
 }
 
 .file-upload{
     float: left;
     clear: both;
-    left: 80%;
+    left: 66%;
 }
 
 .file-upload, input[type = submit]{
@@ -296,20 +300,11 @@ h2{
     margin-bottom: 10px;
 }
 
-.view{
-    width: 70%; 
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .record-field{
     display: block;
     margin-top: 16px;
 }
 
 .row .btn{
-    display: block;
     margin-left: 38%;
-    width: 100px;
 }

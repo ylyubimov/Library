@@ -5,38 +5,80 @@
 }
 
 <h2>Вы хотите удалить книгу?</h2>
-<form method="post">
-    <div>
-        <h4> Название книги: </h4>
-        @Model.record.RecordName <br>
-    </div>
-    <div>
-        <h4> Описание книги: </h4>
-        @Model.record.RecordDescription <br>
-    </div>
-    <div>
-        <h4> Автор книги: </h4>
-        @Model.record.AuthorName <br>
-    </div>
-    <div>
-        <h4> ISBN: </h4>
-        @Model.record.ISBN <br>
-    </div>
-    <div>
-        <h4> Кол-во страниц: </h4>
-        @Model.record.NumberOfPages <br>
-    </div>
-    <div>
-        <h4> Дата создания: </h4>
-        @Model.record.CreationDate <br>
-    </div>
-    <div>
-        <h4> Аннотация: </h4>
-        @Model.record.Annotation <br>
-    </div>
-    <div>
-        <h4> Имя издателя </h4>
-        @Model.publisher.PublisherName
-    </div>
-    <input type="submit" value="Удалить" />
-</form>
+<div class="container view">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Название:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.RecordName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Описание:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.RecordDescription)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Автор:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.AuthorName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>ISBN:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.ISBN)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Дата создания:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.CreationDate)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Количество страниц:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.NumberOfPages)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Аннотация:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.Annotation)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <h3>Издатель:</h3>
+            </div>
+            <div class="col-md-9 col-sm-9 record-field">
+                @Html.DisplayFor(model => model.record.RecordPublisher.PublisherName)
+            </div>
+        </div>
+
+        <input type="submit" value="Удалить" class="btn btn-success" />
+    </form>
+</div>

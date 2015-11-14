@@ -204,7 +204,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Records\Index.cshtml" />
-    <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Records\Record.cshtml" />

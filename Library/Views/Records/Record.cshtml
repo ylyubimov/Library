@@ -1,7 +1,7 @@
 ﻿@model Library.Models.Record
 
 <h2>Информация о книге</h2>
-<div class="view">
+<div class="container view">
     <div class="row">
         <div class="col-md-3 col-sm-3">
             <h3>Название:</h3>
@@ -64,7 +64,7 @@
             @Html.DisplayFor(model => model.Annotation)
         </div>
     </div>
-    <div class="download row">
+    <div class="row">
         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.RecordName + ".pdf")))
         {
             <div class="col-md-3 col-sm-3">

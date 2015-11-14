@@ -4,7 +4,7 @@
 }
 
 <h2 class="header">Изменить информацию о книге</h2>
-<div class="view">
+<div class="container view">
     @{Html.BeginForm();}
     <fieldset>
         @Html.ValidationSummary(true)
@@ -101,7 +101,10 @@
             <span>Файл</span>
             <input type="file" class="upload" />
         </div>
-        <input type="submit" value="Отправить" class="btn btn-success" />
+        <input type="submit" value="Сохранить" class="btn btn-success" />
+        <div class="file-upload">
+            @Html.ActionLink("Удалить", "Delete", "Records", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-danger" })
+        </div>
     </fieldset>
     @{Html.EndForm();}
 </div>

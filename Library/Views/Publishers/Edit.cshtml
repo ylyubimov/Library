@@ -6,29 +6,47 @@
 
 <h2>Изменение информации об издательстве</h2>
 
-@{Html.BeginForm();}
-<fieldset>
-    @Html.ValidationSummary(true)
-    <div class="editor-field">
-        <label>Название:</label>
-        @Html.TextBoxFor(model => model.PublisherName)
-        @Html.ValidationMessageFor(model => model.PublisherName)
-    </div>
-    <div class="editor-field">
-        <label>Адрес:</label>
-        @Html.TextBoxFor(model => model.Address)
-        @Html.ValidationMessageFor(model => model.Address)
-    </div>
-    <div class="editor-field">
-        <label>Телефон:</label>
-        @Html.TextBoxFor(model => model.Number)
-        @Html.ValidationMessageFor(model => model.Number)
-    </div>
-    <div>
-        <label>Email:</label>
-        @Html.TextBoxFor(model => model.Email)
-        @Html.ValidationMessageFor(model => model.Email)
-    </div>
-    <input type="submit" value="Изменить!" />
+<div class="container view">
+    @{Html.BeginForm();}
+    <fieldset>
+        @Html.ValidationSummary(true)
+        <div class="editor-field">
+            <label>
+                Название:
+                @Html.TextBoxFor(model => model.PublisherName, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.PublisherName)
+        </div>
+        <div class="editor-field">
+            <label>
+                Адрес:
+                @Html.TextBoxFor(model => model.Address, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            <label>
+                Телефон:
+                @Html.TextBoxFor(model => model.Number, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.Number)
+        </div>
+        <div class="editor-field">
+            <label>
+                Email:
+                @Html.TextBoxFor(model => model.Email, new { @class = "input-field" })
+            </label>
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            <label>
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+            </label>
+            <label>
+                @Html.ActionLink("Удалить", "Delete", "Publishers", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-danger" })
+            </label>
+
+        </div>
 </fieldset>
-@{Html.EndForm();}
+    @{Html.EndForm();}
+</div>

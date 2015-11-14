@@ -13,14 +13,16 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-3 col-sm-6">
-                <div class="title">
+            <div class="col-md-4 col-sm-6">
+                <div class="mini-box item">
                     <h2>
                         @Html.ActionLink(item.PublisherName, "Publisher/" + item.PublisherId)
                     </h2>
                 </div>
-                <h4 class="header">@Html.DisplayFor(modelItem => item.PublisherName)</h4>
-                <h4 class="header">@Html.DisplayFor(modelItem => item.Address)</h4>
+                <div class="mini-box item">
+                    <h4 class="header">@Html.DisplayFor(modelItem => item.PublisherName)</h4>
+                    <h4 class="header">@Html.DisplayFor(modelItem => item.Address)</h4>
+                </div>
             </div>
         }
     </div>
