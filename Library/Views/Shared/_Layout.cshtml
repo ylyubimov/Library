@@ -29,22 +29,34 @@
             <div class="icon">
             </div>
         </a>
-        @if (User.Identity.IsAuthenticated)
-        {
-            @Html.AntiForgeryToken();
-            @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
-            @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
-            //@Html.Action("LogOff");
-        }
-        else
-        {
-            @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
-            } 
-        @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-            @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
-        @{Html.EndForm();} 
+            @if (User.Identity.IsAuthenticated)
+            {
+                @Html.AntiForgeryToken();
+                @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
+                @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
+                //@Html.Action("LogOff");
+            }
+            else
+            {
+                @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
+            }
+            
+            @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
+            <div class="searchBox">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Страница<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="~/Records/">Книги</a></li>
+                            <li><a href="~/Publishers/">Издатели</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                    @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+            @{Html.EndForm();}
 
-    </nav>
+</nav>
 @RenderBody()
         <hr>
         <footer>
