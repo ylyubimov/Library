@@ -40,21 +40,18 @@
             {
                 @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
             }
-            
-            <div align="center">
+            @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
                 <div class="input-group">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Страница<span class="caret"></span></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Выберите страницу<span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a href="~/Records/">Книги</a></li>
                             <li><a href="~/Publishers/">Издатели</a></li>
                         </ul>
-                        <input type="text" class="form-control" name="find">
+                        <input type="text" class="form-control" name="find" aria-label="search">
                     </div><!-- /btn-group -->
                 </div> <!--/input-group -->
-            </div><!-- /.col-lg-6 -->
-           
-
+            @{Html.EndForm();}
 </nav>
 @RenderBody()
         <hr>
