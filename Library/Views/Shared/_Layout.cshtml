@@ -41,8 +41,7 @@
                 @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
             }
             
-            @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-            <div class="searchBox">
+            <div align="center">
                 <div class="input-group">
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Страница<span class="caret"></span></button>
@@ -50,11 +49,11 @@
                             <li><a href="~/Records/">Книги</a></li>
                             <li><a href="~/Publishers/">Издатели</a></li>
                         </ul>
+                        <input type="text" class="form-control" name="find">
                     </div><!-- /btn-group -->
-                    @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
-                </div><!-- /input-group -->
+                </div> <!--/input-group -->
             </div><!-- /.col-lg-6 -->
-            @{Html.EndForm();}
+           
 
 </nav>
 @RenderBody()
