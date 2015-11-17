@@ -18,8 +18,8 @@
 
                 <div class="mini-box item">
                     <a href=@Url.Action("Record/" + item.RecordId, "Records")>
-                        @{var path = "/Data/"+item.ISBN+".png";}
-                         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "/Data/", item.ISBN + ".png")))
+                        @{var path = "/Data/" + item.ISBN + ".png";}
+                         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
                          {
                             <img src="@path" width="100%" />
                          }
@@ -35,7 +35,7 @@
                         var publisher = (from p in q.Publishers where item.PublisherId == p.PublisherId select p).FirstOrDefault();
                     }
                     <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p></h4>
-                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.RecordName + ".pdf")))
+                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
                     {
                         @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
                     }
