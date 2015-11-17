@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Library.Models;
 using System.Net;
+using System.IO;
 
 namespace Library.Controllers
 {
@@ -25,11 +26,13 @@ namespace Library.Controllers
                 return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
             }
         }
+
         [HttpGet]
         public ActionResult Test()
         {
-            return PartialView("_Modal");        
+            return PartialView("_Modal");
         }
+
         public ActionResult Index()
         {
             if (Request.IsAjaxRequest())
@@ -277,13 +280,25 @@ namespace Library.Controllers
             }
         }
 
+
+        private void removeFiles(Record record)
+        {
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
+            if (System.IO.File.Exists(System.IO.Path.Combine(path, record.ISBN + ".pdf")))
+            {
+                System.IO.File.Delete(System.IO.Path.Combine(path, record.ISBN + ".pdf"));
+                System.IO.File.Delete(System.IO.Path.Combine(path, record.ISBN + ".png"));
+            }
+        }
+
         [HttpPost]
         public ActionResult Delete(int id, AdminDeletionModel model)
         {
             using (LibraryContext db = new LibraryContext())
             {
-                db.Records.Remove((from r in db.Records where r.RecordId == id select r).FirstOrDefault());
-                // todo: remove also pictures form Data
+                var record = (from r in db.Records where r.RecordId == id select r).FirstOrDefault();
+                db.Records.Remove(record);
+                removeFiles(record);
                 db.SaveChanges();
                 return Redirect("/Records/Index");
             }

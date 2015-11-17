@@ -19,7 +19,7 @@
                 <div class="mini-box item">
                     <a href=@Url.Action("Record/" + item.RecordId, "Records")>
                         @{var path = "/Data/"+item.ISBN+".png";}
-                         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
+                         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "/Data/", item.ISBN + ".png")))
                          {
                             <img src="@path" width="100%" />
                          }
