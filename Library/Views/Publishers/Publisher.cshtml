@@ -72,13 +72,9 @@
                         }
                         <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p>
                     </h4>
-                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.RecordName + ".pdf")))
+                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
                     {
                         @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Недоступно", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "disabled btn btn-danger" });
                     }
 
                     @if (User.Identity.IsAuthenticated)
