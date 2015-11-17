@@ -212,7 +212,7 @@ namespace Library.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Edit(int id, AdminAddEditModel model)
+        public ActionResult Edit(int id, AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
             {
@@ -230,7 +230,7 @@ namespace Library.Controllers
                     editRecord(recordQuery, model);
                     recordQuery.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.SaveChanges();
-                    /* todo: Load pdf here*/
+                    loadPdf(recordQuery.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 // Новое издательство. Валидация создаваемого издательства
@@ -247,7 +247,7 @@ namespace Library.Controllers
                     editPublisher(recordQuery.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Publishers.Add(recordQuery.RecordPublisher);
                     db.SaveChanges();
-                    /* todo: Load pdf here*/
+                    loadPdf(recordQuery.RecordName, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 else
