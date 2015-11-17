@@ -39,10 +39,7 @@
                     {
                         @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
                     }
-                    else
-                    {
-                        @Html.ActionLink("Недоступно", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "disabled btn btn-danger" });
-                    }
+            
 
                     @if (User.Identity.IsAuthenticated)
                     {
