@@ -71,12 +71,6 @@
                 @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
             </div>
         }
-        else
-        {
-            <div class="col-md-3 col-sm-3">
-                @Html.ActionLink("Недоступно", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "disabled btn btn-danger" })
-            </div>
-        }
     </div>
 </div>
 
