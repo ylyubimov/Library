@@ -169,7 +169,6 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Views\Records\default.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

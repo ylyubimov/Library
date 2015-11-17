@@ -121,7 +121,7 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 Record b = db.Records.Find(id);
-                return File("../../Data/" + b.RecordName + ".pdf", "application/pdf");
+                return File("../../Data/" + b.ISBN + ".pdf", "application/pdf");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Library.Controllers
                     newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
                     db.SaveChanges();
-                    loadPdf(newRecord.RecordName, fileUpload);
+                    loadPdf(newRecord.ISBN, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 // Новое издательство. Валидация создаваемого издательства
@@ -171,7 +171,7 @@ namespace Library.Controllers
                     db.Records.Add(newRecord);
                     db.Publishers.Add(newRecord.RecordPublisher);
                     db.SaveChanges();
-                    loadPdf(newRecord.RecordName, fileUpload);
+                    loadPdf(newRecord.ISBN, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 else
@@ -230,7 +230,7 @@ namespace Library.Controllers
                     editRecord(recordQuery, model);
                     recordQuery.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.SaveChanges();
-                    loadPdf(recordQuery.RecordName, fileUpload);
+                    loadPdf(recordQuery.ISBN, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 // Новое издательство. Валидация создаваемого издательства
@@ -247,7 +247,7 @@ namespace Library.Controllers
                     editPublisher(recordQuery.RecordPublisher, model.PublisherName, model.PublisherAddress, model.PublisherNumber, model.PublisherEmail);
                     db.Publishers.Add(recordQuery.RecordPublisher);
                     db.SaveChanges();
-                    loadPdf(recordQuery.RecordName, fileUpload);
+                    loadPdf(recordQuery.ISBN, fileUpload);
                     return Redirect("/Records/Index");
                 }
                 else
@@ -283,6 +283,7 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 db.Records.Remove((from r in db.Records where r.RecordId == id select r).FirstOrDefault());
+                // todo: remove also pictures form Data
                 db.SaveChanges();
                 return Redirect("/Records/Index");
             }
