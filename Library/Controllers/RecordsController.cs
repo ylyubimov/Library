@@ -33,6 +33,26 @@ namespace Library.Controllers
             return PartialView("_Modal");
         }
 
+        private List<Record> formListOfRecords(List<Record> dbRecords)
+        {
+            var records = new List<Record>();
+            for (int i = 0; i < dbRecords.Count(); ++i)
+            {
+                if (dbRecords[i].Recomended)
+                {
+                    records.Add(dbRecords[i]);
+                }
+            }
+            for (int i = 0; i < dbRecords.Count(); ++i)
+            {
+                if (!dbRecords[i].Recomended)
+                {
+                    records.Add(dbRecords[i]);
+                }
+            }
+            return records;
+        }
+
         public ActionResult Index()
         {
             if (Request.IsAjaxRequest())
@@ -42,11 +62,13 @@ namespace Library.Controllers
                 String a = Request["find"];
                 if (!String.IsNullOrEmpty(Request["find"]))
                 {
-                    return View(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
+                    var listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
+                    return View(listToView);
                 }
                 else
                 {
-                    return View(db.Records.ToList());
+                    var listToView = formListOfRecords(db.Records.ToList());
+                    return View(listToView);
                 }
             }
         }

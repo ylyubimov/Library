@@ -6,33 +6,16 @@
 </div>
 
 <div class="container view">
-    @{
-        List<Library.Models.Record> records = new List<Library.Models.Record>();
-        int recommendedCounter = 0;
-        for (int i = 0; i < Model.Count(); ++i)
-        {
-            if (Model[i].Recomended)
-            {
-                ++recommendedCounter;
-                records.Add(Model[i]);
-            }
-        }
-        for (int i = 0; i < Model.Count(); ++i)
-        {
-            if (!Model[i].Recomended)
-            {
-                records.Add(Model[i]);
-            }
-        }
-        int counter = 0;
-    }
+
     <h2>Рекомендовано:</h2>
-    @foreach (var item in records)
+    @{bool noRecomendedRecords = false; }
+    @foreach (var item in Model)
     {
-        if (counter == recommendedCounter && !item.Recomended)
+        if (!item.Recomended && !noRecomendedRecords)
         {
             <!--todo: перенести на следующий блок ниже-->
             <h2>Остальная коллекция:</h2>
+            noRecomendedRecords = true;
         }
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="mini-box item title">
@@ -74,7 +57,6 @@
                 }
             </div>
         </div>
-        counter++;
     }
 </div>
 
