@@ -90,6 +90,7 @@ namespace Library.Controllers
             record.NumberOfPages = model.NumberOfPages;
             record.Annotation = model.Annotation;
             record.CreationDate = model.CreationDate;
+            record.Recomended = model.Recomended;
         }
 
         [Authorize]
@@ -209,6 +210,7 @@ namespace Library.Controllers
                 model.CreationDate = baseRecord.CreationDate;
                 model.ISBN = baseRecord.ISBN;
                 model.NumberOfPages = baseRecord.NumberOfPages;
+                model.Recomended = baseRecord.Recomended;
                 return View(model);
             }
         }

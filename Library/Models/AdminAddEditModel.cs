@@ -41,6 +41,8 @@ namespace Library.Models
 
         public string PublisherNumber { get; set; }
 
+        public bool Recomended { get; set; }
+
         [DataType(DataType.EmailAddress)]
         public string PublisherEmail { get; set; }
 

@@ -59,6 +59,13 @@
         </div>
         <div class="editor-field">
             <label>
+                Рекомендовать?
+                @Html.CheckBoxFor(model => model.Recomended)
+            </label>
+            @Html.ValidationMessageFor(model => Model.Recomended)
+        </div>
+        <div class="editor-field">
+            <label>
                 Издательство
                 @Html.DropDownListFor(model => model.PublisherId, Model.Publishers, "Новое издательство:", new { @class = "dropdown" })
             </label>
