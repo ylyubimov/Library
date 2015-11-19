@@ -32,6 +32,8 @@ namespace Library.Models
 
         public int PublisherId { get; set; }
 
+        public bool Recomended { get; set; }
+
         [ForeignKey("PublisherId")]
         public virtual Publisher RecordPublisher { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Library.Models.Record>
+﻿@model List<Library.Models.Record>
 <div>
     <h1 class="library-index">
         Здесь собраны все книги нашей библиотеки.
@@ -6,53 +6,80 @@
 </div>
 
 <div class="container view">
-
-        @foreach (var item in Model)
+    @{
+        List<Library.Models.Record> records = new List<Library.Models.Record>();
+        int recommendedCounter = 0;
+        for (int i = 0; i < Model.Count(); ++i)
         {
-            <div class="col-lg-3 col-md-6 col-sm-6">   
-                <div class="mini-box item title">
-                    <h2>
-                        @Ajax.ActionLink(item.RecordName, "Test", "Records", new { id = item.RecordId }, new AjaxOptions { UpdateTargetId = "container" }, new { data_toggle = "modal", data_target = "#myModal" })
-                    </h2>
-                </div>
+            if (Model[i].Recomended)
+            {
+                ++recommendedCounter;
+                records.Add(Model[i]);
+            }
+        }
+        for (int i = 0; i < Model.Count(); ++i)
+        {
+            if (!Model[i].Recomended)
+            {
+                records.Add(Model[i]);
+            }
+        }
+        int counter = 0;
+    }
+    <h2>Рекомендовано:</h2>
+    @foreach (var item in records)
+    {
+        if (counter == recommendedCounter && !item.Recomended)
+        {
+            <h2>Остальная коллекция:</h2>
+        }
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="mini-box item title">
+                <h2>
+                    @Ajax.ActionLink(item.RecordName, "Test", "Records", new { id = item.RecordId }, new AjaxOptions { UpdateTargetId = "container" }, new { data_toggle = "modal", data_target = "#myModal" })
+                </h2>
+            </div>
 
-                <div class="mini-box item">
-                    <a href=@Url.Action("Record/" + item.RecordId, "Records")>
-                        @{var path = "/Data/" + item.ISBN + ".png";}
-                         @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
-                         {
-                            <img src="@path" width="100%" />
-                         }
-                         else
-                         {
-                            <img src="~/Data/default.jpg" width="100%" />
-                         }
+            <div class="mini-box item">
+                <a href=@Url.Action("Record/" + item.RecordId, "Records")>
+                    @{var path = "/Data/" + item.ISBN + ".png";}
+                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
+                    {
+                        <img src="@path" width="100%" />
+                    }
+                    else
+                    {
+                        <img src="~/Data/default.jpg" width="100%" />
+                    }
 
-                    </a>
-                    <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
-                    <h4>Издательство: <br />
+                </a>
+                <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
+                <h4>
+                    Издательство: <br />
                     @{Library.Models.LibraryContext q = new Library.Models.LibraryContext();
                         var publisher = (from p in q.Publishers where item.PublisherId == p.PublisherId select p).FirstOrDefault();
                     }
-                    <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p></h4>
-                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
-                    {
-                        @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
-                    }
-            
+                    <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p>
+                </h4>
+                @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
+                {
+                    @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
+                }
 
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
-                    }
-                </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
+                }
             </div>
-        }
+        </div>
+        counter++;
+    }
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-    <div id="container">
-    </div>
+        <div id="container">
+        </div>
     </div>
 </div>

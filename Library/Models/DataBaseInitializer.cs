@@ -23,11 +23,11 @@ namespace Library.Models
             db.Publishers.Add(new Publisher { PublisherName = "ЛучшийМир", Address = "Земля", Number = "8-800-555-35-35" });
             db.Publishers.Add(new Publisher { PublisherName = "Издательство", Email = "izd@mail.ru" });
             // Добавление книг
-            Record newRecord = new Record { RecordName = "Матанчик 3 часть", RecordDescription = "Матан для физтехов", AuthorName = "Иванов", ISBN = "123a10" };
+            Record newRecord = new Record { RecordName = "Матанчик 3 часть", RecordDescription = "Матан для физтехов", AuthorName = "Иванов", ISBN = "123a10", Recomended = false };
             newRecord.RecordPublisher = newPublisher;
             db.Records.Add(newRecord);
 
-            newRecord = new Record { RecordName = "Матанчик 666 часть", RecordDescription = "Матан для нас", AuthorName = "Иванов", ISBN = "12345" };
+            newRecord = new Record { RecordName = "Матанчик 666 часть", RecordDescription = "Матан для нас", AuthorName = "Иванов", ISBN = "12345", Recomended = true };
             newRecord.RecordPublisher = newPublisher;
             db.Records.Add(newRecord);
 
