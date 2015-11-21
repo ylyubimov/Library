@@ -175,7 +175,6 @@ nav a{
     display: block;
     margin-left: 20%;
     margin-right: auto;
-    height: 500px !important;
 }
 
 .mini-box .title{
@@ -306,11 +305,6 @@ h2{
     margin-top: 16px;
 }
 
-.row .btn{
-    margin-left: 38%;
-    width: 100px;
-}
-
 .modal {
     position: fixed;
     top: 10%;
@@ -321,4 +315,13 @@ h2{
     display: none;
     overflow: auto;
     overflow-y: auto;
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
