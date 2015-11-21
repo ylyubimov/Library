@@ -171,10 +171,11 @@ nav a{
     margin-top: 20px;
 }
 
-.item{
+.mini-box .item{
     display: block;
     margin-left: 20%;
     margin-right: auto;
+    height: 500px !important;
 }
 
 .mini-box .title{
