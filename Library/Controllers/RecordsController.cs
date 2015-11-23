@@ -23,7 +23,7 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 Record b = db.Records.Find(id);
-                return PartialView("_Modal", new { firstName = "bdfy", lastName = "bdfysx" });
+                return PartialView("_Modal", b);
             }
         }
 
@@ -161,7 +161,6 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult Add()
         {
             AdminAddEditModel model = new AdminAddEditModel();
@@ -170,7 +169,6 @@ namespace Library.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
