@@ -51,47 +51,50 @@
     @{Library.Models.LibraryContext db = new Library.Models.LibraryContext();
             var records = (from r in db.Records where r.PublisherId == Model.PublisherId select r);
     }
-    @foreach (var item in records)
+
+    <div class="row">
+        @foreach (var item in records)
             {
-        <div class="col-md-3 col-sm-6">
-            <div class="mini-box item title">
-                <h2>
-                    <a href=@Url.Action("Record/" + item.RecordId, "Records")> @item.RecordName</a>
-                </h2>
-            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="mini-box item title">
+                    <h2>
+                        <a href=@Url.Action("Record/" + item.RecordId, "Records")> @item.RecordName</a>
+                    </h2>
+                </div>
 
-            <div class="mini-box item">
-                <a href=@Url.Action("Record/" + item.RecordId, "Records")>
-                    @{var path = "/Data/" + item.ISBN + ".png";}
-                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
-                    {
-                        <img src="@path" width="100%" />
-                    }
-                    else
-                    {
-                        <img src="~/Data/default.jpg" width="100%" />
-                    }
-                </a>
-                <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
-                <h4>
-                    Издательство: <br />
-                    @{Library.Models.LibraryContext q = new Library.Models.LibraryContext();
-                        var publisher = (from p in q.Publishers where item.PublisherId == p.PublisherId select p).FirstOrDefault();
-                    }
-                    <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p>
-                </h4>
-                @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
-                {
-                    @Html.ActionLink("Скачать бесплатно и без СМС", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
-                }
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                    @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
-                }
-            </div>
-        </div>
+                <div class="mini-box item">
+                    <a href=@Url.Action("Record/" + item.RecordId, "Records")>
+                        @{var path = "/Data/" + item.ISBN + ".png";}
+                        @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".png")))
+                        {
+                            <img src="@path" width="100%" />
                         }
+                        else
+                        {
+                            <img src="~/Data/default.jpg" width="100%" />
+                        }
+                    </a>
+                    <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
+                    <h4>
+                        Издательство: <br />
+                        @{Library.Models.LibraryContext q = new Library.Models.LibraryContext();
+                            var publisher = (from p in q.Publishers where item.PublisherId == p.PublisherId select p).FirstOrDefault();
+                        }
+                        <p class="publisher">@Html.DisplayFor(modelItem => publisher.PublisherName)</p>
+                    </h4>
+                    @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")))
+                {
+                        @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
+                }
+
+                    @if (User.Identity.IsAuthenticated)
+                {
+                        @Html.ActionLink("Редактировать", "Edit", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" })
+                    }
+                </div>
+            </div>
+                            }
+    </div>
 </div>
 
 

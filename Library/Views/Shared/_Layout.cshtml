@@ -25,27 +25,56 @@
 
 <body>
     <nav>
-        <a href="~/Records/Index" class="logo">
-            <div class="icon">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-md-3">
+                <a href="~/Records/Index" class="logo">
+                    <div class="icon">
+                    </div>
+                </a>
             </div>
-        </a>
-        @if (User.Identity.IsAuthenticated)
-        {
-            @Html.AntiForgeryToken();
-            @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
-            @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
-            //@Html.Action("LogOff");
-        }
-        else
-        {
-            @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
-            } 
-        @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-            @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
-        @{Html.EndForm();} 
+            <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Поиск <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='/Records/Index';" value="По книгам" /></li>
+                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='~/Publishers/Index';" value="По издателям" /></li>
+                        </ul>
+                        @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
+                        @{Html.EndForm();}
+                    </div>
+                    
+                </div>
+            </div>
 
+            <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Переход <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Records/Index">Книги</a></li>
+                            <li><a href="/Publishers/Index">Издатели</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-md-3">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.AntiForgeryToken();
+                    @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
+                    @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
+                }
+                else
+                {
+                    @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
+                }
+            </div>
+        </div>
     </nav>
-@RenderBody()
+
+    @RenderBody()
         <hr>
         <footer>
             <p>&copy; МФТИ 2015</p>

@@ -108,6 +108,11 @@ h2 a:visited {
     border-color: #c79b81 !important;
     color: #222 !important;
     box-shadow: rgba(0,0,0,0.4) 1px 2px 2px;
+    border-radius: 5px !important;
+}
+
+.caret{
+    border-top-color: #222 !important;
 }
 
 .btn-success:hover{
@@ -198,21 +203,27 @@ nav a{
 
 .searchBox{
     max-width: 800px;
-    width: 40%;
+    width: 80%;
     height: 30px;
 
     background: #fefbf6;
     border: 1px solid #c28157;
     font-size: 20px;
-    float: left;
     color: #222;
     padding-left: 15px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
-    position:relative;
-    margin-top: -30px;
-    margin-left: 25%;
+    border-radius: 5px !important;
+    position: relative;
+    margin-left: 5px;
+    top: 3px;
+}
+
+.searchBox:focus{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px !important;
+    outline: none;
 }
 
 .icon {
@@ -347,4 +358,42 @@ h2{
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin: 0 !important;
+}
+
+nav .col-lg-3 {
+    margin-top: auto;
+}
+
+nav .col-lg-3 .logo{
+    margin-top: -53px;
+}
+
+nav .btn-success {
+    margin-left: 10px;
+}
+
+.input-group-btn ul {
+    margin: 0;
+    background-color: antiquewhite;
+}
+.input-group-btn li:hover, .input-group-btn a:hover{
+    background-image: none !important;
+    background-color: #dd724e !important;
+}
+
+.input-group-btn a{
+    margin: 0;
+    text-align: center;
+}
+
+.dropdown-button {
+    background: none !important;
+    box-shadow: none !important;
+    border: none;
+    width: 100% !important;
+    display: block;
+    max-width: 100% !important;
+    height: 30px;
+    margin: 0 !important;
 }

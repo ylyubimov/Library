@@ -53,23 +53,32 @@ namespace Library.Controllers
             return records;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             if (Request.IsAjaxRequest())
                 return PartialView("_Modal");
+
             using (LibraryContext db = new LibraryContext())
             {
-                String a = Request["find"];
-                if (!String.IsNullOrEmpty(Request["find"]))
+                var listToView = formListOfRecords(db.Records.ToList());
+                switch (search)
                 {
-                    var listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
-                    return View(listToView);
+                    case "По книгам":
+                        String a = Request["find"];
+                        if (!String.IsNullOrEmpty(Request["find"]))
+                        {
+                            listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
+                            return View(listToView);
+                        }
+                        else
+                        {
+                            return View(listToView);
+                        }
+                    case "По издателям":
+                        object model = new PublishersController().Search(Request);
+                        return View("~/Views/Publishers/Index.cshtml", model);
                 }
-                else
-                {
-                    var listToView = formListOfRecords(db.Records.ToList());
-                    return View(listToView);
-                }
+                return View(listToView);
             }
         }
 

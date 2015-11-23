@@ -26,6 +26,22 @@ namespace Library.Controllers
             }
         }
 
+        public object Search( HttpRequestBase req)
+        {
+            using (LibraryContext db = new LibraryContext())
+            {
+                string a = req["find"];
+                if (!string.IsNullOrEmpty(a))
+                {
+                    return db.Publishers.Where(s => s.PublisherName != null && s.PublisherName.Contains(a)).ToList();
+                }
+                else
+                {
+                    return db.Publishers.ToList();
+                }
+            }
+        }
+
         [Route("publishers/publisher/{id:int}")]
         public ActionResult Publisher(int id)
         {
