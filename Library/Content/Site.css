@@ -397,3 +397,8 @@ nav .btn-success {
     height: 30px;
     margin: 0 !important;
 }
+
+.publisher-edit {
+    margin-left: auto;
+    margin-right: auto;
+}
