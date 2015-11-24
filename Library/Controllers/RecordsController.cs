@@ -61,13 +61,24 @@ namespace Library.Controllers
             using (LibraryContext db = new LibraryContext())
             {
                 var listToView = formListOfRecords(db.Records.ToList());
+                string request = Request["find"];
                 switch (search)
                 {
                     case "По книгам":
-                        String a = Request["find"];
-                        if (!String.IsNullOrEmpty(Request["find"]))
+                        if (!String.IsNullOrEmpty(request))
                         {
-                            listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(a) || s.RecordDescription != null && s.RecordDescription.Contains(a)).ToList());
+                            listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(request) || s.RecordDescription != null && s.RecordDescription.Contains(request)).ToList());
+                            return View(listToView);
+                        }
+                        else
+                        {
+                            return View(listToView);
+                        }
+
+                    case "По автору":
+                        if (!String.IsNullOrEmpty(request))
+                        {
+                            listToView = formListOfRecords(db.Records.Where(s => s.AuthorName != null && s.AuthorName.Contains(request)).ToList());
                             return View(listToView);
                         }
                         else
@@ -146,7 +157,7 @@ namespace Library.Controllers
                 if (file == null) continue;
                 string fileExtension = System.IO.Path.GetExtension(file.FileName).ToLower();
                 string[] allowedExtensions = { ".pdf", ".djvu", ".txt" };
-                if(allowedExtensions.Contains(fileExtension))
+                if (allowedExtensions.Contains(fileExtension))
                 {
                     string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
                     file.SaveAs(System.IO.Path.Combine(path, name + fileExtension));
@@ -171,10 +182,10 @@ namespace Library.Controllers
                 Record b = db.Records.Find(id);
                 string path = "../../Data/" + b.ISBN + ".pdf", MIME = "application/pdf", name = b.ISBN + ".pdf";
                 if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".pdf")))
-                { 
+                {
                     path = "../../Data/" + b.ISBN + ".pdf";
                     MIME = "application/pdf";
-                    name = b.ISBN+".pdf";
+                    name = b.ISBN + ".pdf";
                 }
                 string a = "../../Data/" + b.ISBN + ".djvu";
                 if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".djvu")))

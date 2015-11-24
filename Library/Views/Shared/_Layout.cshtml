@@ -39,6 +39,7 @@
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Поиск <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='/Records/Index';" value="По книгам" /></li>
+                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='/Records/Index';" value="По автору" /></li>
                             <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='~/Publishers/Index';" value="По издателям" /></li>
                         </ul>
                         @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
