@@ -144,10 +144,22 @@ namespace Library.Controllers
             foreach (var file in fileUpload)
             {
                 if (file == null) continue;
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
-                file.SaveAs(System.IO.Path.Combine(path, name + ".pdf"));
-                System.IO.Directory.SetCurrentDirectory(path);
-                GhostscriptSharp.GhostscriptWrapper.GeneratePageThumb(name + ".pdf", name + ".png", 1, 100, 100);
+                string fileExtension = System.IO.Path.GetExtension(file.FileName).ToLower();
+                string[] allowedExtensions = { ".pdf", ".djvu", ".txt" };
+                if(allowedExtensions.Contains(fileExtension))
+                {
+                    string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
+                    file.SaveAs(System.IO.Path.Combine(path, name + fileExtension));
+                    System.IO.Directory.SetCurrentDirectory(path);
+                    try
+                    {
+                        GhostscriptSharp.GhostscriptWrapper.GeneratePageThumb(name + fileExtension, name + ".png", 1, 100, 100);
+                    }
+                    catch (System.Exception e)
+                    {
+                        //Ничего не делаем, ну можно логировать на будущее
+                    }
+                }
             }
         }
 
@@ -155,12 +167,34 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
+                //Костыль для C# который очень странно возвращает значения
                 Record b = db.Records.Find(id);
-                return File("../../Data/" + b.ISBN + ".pdf", "application/pdf");
+                string path = "../../Data/" + b.ISBN + ".pdf", MIME = "application/pdf", name = b.ISBN + ".pdf";
+                if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".pdf")))
+                { 
+                    path = "../../Data/" + b.ISBN + ".pdf";
+                    MIME = "application/pdf";
+                    name = b.ISBN+".pdf";
+                }
+                string a = "../../Data/" + b.ISBN + ".djvu";
+                if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".djvu")))
+                {
+                    path = "../../Data/" + b.ISBN + ".djvu";
+                    MIME = "image/x-djvu";
+                    name = b.ISBN + ".djvu";
+                }
+                if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".txt")))
+                {
+                    path = "../../Data/" + b.ISBN + ".txt";
+                    MIME = "text/rtf";
+                    name = b.ISBN + ".txt";
+                }
+                return File(path, MIME, name);
             }
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Add()
         {
             AdminAddEditModel model = new AdminAddEditModel();
@@ -169,6 +203,7 @@ namespace Library.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
