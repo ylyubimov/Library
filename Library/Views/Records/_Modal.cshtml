@@ -64,8 +64,11 @@
                 <h3>Ссылка на данную книгу:</h3>
             </div>
             <div class="col-md-9 col-sm-9 record-field">
+                @{Library.Models.LibraryContext q = new Library.Models.LibraryContext();
+                    var publisher = (from p in q.Publishers where Model.PublisherId == p.PublisherId select p).FirstOrDefault();
+                }
                 @Html.DisplayFor(model => model.AuthorName)  @Html.DisplayFor(model => model.RecordName)  /  
-                @Html.DisplayFor(model => model.AuthorName).— М.: @Html.DisplayFor(model => model.RecordPublisher.PublisherName), @Html.DisplayFor(model => model.CreationDate)
+                @Html.DisplayFor(model => model.AuthorName).— М.: @Html.DisplayFor(model => publisher.PublisherName), @Html.DisplayFor(model => model.CreationDate)
                 .— @Html.DisplayFor(model => model.NumberOfPages) с.
             </div>
         </div>
