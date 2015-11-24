@@ -16,7 +16,7 @@
             <div class="col-md-4 col-sm-6">
                 <div class="mini-box item">
                     <h2>
-                        @Html.ActionLink(item.PublisherName, "Publisher/" + item.PublisherId)
+                        @Html.ActionLink(item.PublisherName, "Publisher", "Publishers", new { id = item.PublisherId }, null)
                     </h2>
                 </div>
                 <div class="mini-box item">
