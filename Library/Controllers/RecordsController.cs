@@ -53,7 +53,7 @@ namespace Library.Controllers
             return records;
         }
 
-        public ActionResult Index(string search)
+        public ActionResult Index()
         {
             if (Request.IsAjaxRequest())
                 return PartialView("_Modal");
@@ -62,7 +62,8 @@ namespace Library.Controllers
             {
                 var listToView = formListOfRecords(db.Records.ToList());
                 string request = Request["find"];
-                switch (search)
+                string type = Request["search-button"];
+                switch (type)
                 {
                     case "По книгам":
                         if (!String.IsNullOrEmpty(request))
@@ -75,7 +76,7 @@ namespace Library.Controllers
                             return View(listToView);
                         }
 
-                    case "По автору":
+                    case "По авторам":
                         if (!String.IsNullOrEmpty(request))
                         {
                             listToView = formListOfRecords(db.Records.Where(s => s.AuthorName != null && s.AuthorName.Contains(request)).ToList());

@@ -35,23 +35,6 @@
             <div class="col-lg-3 col-sm-3 col-md-3">
                 <div class="input-group">
                     <div class="input-group-btn">
-                        @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Поиск <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='/Records/Index';" value="По книгам" /></li>
-                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='/Records/Index';" value="По автору" /></li>
-                            <li><input type="submit" name="search" class="dropdown-button" onclick="window.location='~/Publishers/Index';" value="По издателям" /></li>
-                        </ul>
-                        @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
-                        @{Html.EndForm();}
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-sm-3 col-md-3">
-                <div class="input-group">
-                    <div class="input-group-btn">
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Переход <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a href="/Records/Index">Книги</a></li>
@@ -60,6 +43,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-sm-3 col-md-3">
+                @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
+                @Html.DropDownList("search-button", new SelectList( new @List<Object> { "По книгам", "По авторам", "По издателям" }))
+                @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
+                <input type="submit" />
+                @{Html.EndForm();}
+            </div>
+
             <div class="col-lg-3 col-sm-3 col-md-3">
                 @if (User.Identity.IsAuthenticated)
                 {
