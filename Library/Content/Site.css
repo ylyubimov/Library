@@ -109,6 +109,7 @@ h2 a:visited {
     color: #222 !important;
     box-shadow: rgba(0,0,0,0.4) 1px 2px 2px;
     border-radius: 5px !important;
+    outline: none !important;
 }
 
 .caret{
@@ -197,13 +198,11 @@ nav a{
 .logging {
     position:relative;
     width: 80px;
-    margin-left: 70%;
-    margin-right:2%;
 }
 
 .searchBox{
     max-width: 800px;
-    width: 80%;
+    width: 40%;
     height: 30px;
 
     background: #fefbf6;
@@ -216,7 +215,8 @@ nav a{
     border-radius: 5px !important;
     position: relative;
     margin-left: 5px;
-    top: 3px;
+    margin-right: 3px;
+    top: 13px;
 }
 
 .searchBox:focus{
@@ -239,6 +239,7 @@ nav a{
 
 .logo{
     margin-top: 0px;
+    min-width: 64px;
 }
 
 .input-field, .dropdown{
@@ -361,41 +362,28 @@ h2{
   margin: 0 !important;
 }
 
-nav .col-lg-3 {
-    margin-top: auto;
-}
-
-nav .col-lg-3 .logo{
-    margin-top: -53px;
-}
-
-nav .btn-success {
-    margin-left: 10px;
-}
-
-.input-group-btn ul {
+.dropdown-menu ul, select option {
     margin: 0;
     background-color: antiquewhite;
 }
-.input-group-btn li:hover, .input-group-btn a:hover{
+.dropdown-menu li:hover, .dropdown-menu a:hover, .search-button-item:hover{
     background-image: none !important;
     background-color: #dd724e !important;
 }
 
-.input-group-btn a{
+.dropdown-menu a{
     margin: 0;
     text-align: center;
 }
 
-.dropdown-button {
-    background: none !important;
-    box-shadow: none !important;
-    border: none;
-    width: 100% !important;
+.dropdown-toggle, select{
     display: block;
-    max-width: 100% !important;
-    height: 30px;
-    margin: 0 !important;
+    margin-top: 20px;
+}
+
+nav input[type="submit"]{
+    display: inline;
+    margin-top: 20px;
 }
 
 .publisher-edit {

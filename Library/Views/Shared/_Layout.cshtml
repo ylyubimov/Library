@@ -26,32 +26,30 @@
 <body>
     <nav>
         <div class="row">
-            <div class="col-lg-3 col-sm-3 col-md-3">
+            <div class="col-lg-2 col-sm-2 col-md-2">
                 <a href="~/Records/Index" class="logo">
                     <div class="icon">
                     </div>
                 </a>
             </div>
-            <div class="col-lg-3 col-sm-3 col-md-3">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Переход <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="/Records/Index">Книги</a></li>
-                            <li><a href="/Publishers/Index">Издатели</a></li>
-                        </ul>
-                    </div>
-                </div>
+
+            <div class="col-lg-2 col-sm-2 col-md-2">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Переход <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/Records/Index">Книги</a></li>
+                    <li><a href="/Publishers/Index">Издатели</a></li>
+                </ul>
             </div>
-            <div class="col-lg-3 col-sm-3 col-md-3">
+
+            <div class="col-lg-6 col-sm-6 col-md-6">
                 @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-                @Html.DropDownList("search-button", new SelectList( new @List<Object> { "По книгам", "По авторам", "По издателям" }))
+                @Html.DropDownList("search-button", new SelectList(new @List<Object> { "По книгам", "По авторам", "По издателям" }), new { @class = "btn btn-success" } )
                 @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
-                <input type="submit" />
+                <input type="submit" class="btn btn-success" value="Найти" />
                 @{Html.EndForm();}
             </div>
 
-            <div class="col-lg-3 col-sm-3 col-md-3">
+            <div class="col-lg-2 col-sm-2 col-md-2">
                 @if (User.Identity.IsAuthenticated)
                 {
                     @Html.AntiForgeryToken();
@@ -65,7 +63,6 @@
             </div>
         </div>
     </nav>
-
     @RenderBody()
         <hr>
         <footer>
@@ -79,5 +76,8 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/application.js"></script>
+    @*<script>
+        $("#search-button").find("option").append("<div>asdasd</div>");
+    </script>*@
 </body>
 </html>
