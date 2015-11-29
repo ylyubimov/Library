@@ -53,8 +53,8 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     @Html.AntiForgeryToken();
+                    @Html.ActionLink("Новая книга", "Add", "Records", null, new { @class = "btn btn-success" });
                     @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
-                    @Html.ActionLink("Админка", "Index", "Admin", null, new { @class = "btn btn-success" });
                 }
                 else
                 {
