@@ -69,10 +69,12 @@ namespace Library.Controllers
                         if (!String.IsNullOrEmpty(request))
                         {
                             listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(request) || s.RecordDescription != null && s.RecordDescription.Contains(request)).ToList());
+                            listToView.Reverse();
                             return View(listToView);
                         }
                         else
                         {
+                            listToView.Reverse();
                             return View(listToView);
                         }
 
@@ -80,16 +82,19 @@ namespace Library.Controllers
                         if (!String.IsNullOrEmpty(request))
                         {
                             listToView = formListOfRecords(db.Records.Where(s => s.AuthorName != null && s.AuthorName.Contains(request)).ToList());
+                            listToView.Reverse();
                             return View(listToView);
                         }
                         else
                         {
+                            listToView.Reverse();
                             return View(listToView);
                         }
                     case "По издателям":
                         object model = new PublishersController().Search(Request);
                         return View("~/Views/Publishers/Index.cshtml", model);
                 }
+                listToView.Reverse();
                 return View(listToView);
             }
         }
