@@ -186,20 +186,20 @@ namespace Library.Controllers
                 {
                     path = "../../Data/" + b.ISBN + ".pdf";
                     MIME = "application/pdf";
-                    name = b.ISBN + ".pdf";
+                    name = b.RecordName + ".pdf";
                 }
                 string a = "../../Data/" + b.ISBN + ".djvu";
                 if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".djvu")))
                 {
                     path = "../../Data/" + b.ISBN + ".djvu";
                     MIME = "image/x-djvu";
-                    name = b.ISBN + ".djvu";
+                    name = b.RecordName + ".djvu";
                 }
                 if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".txt")))
                 {
                     path = "../../Data/" + b.ISBN + ".txt";
                     MIME = "text/rtf";
-                    name = b.ISBN + ".txt";
+                    name = b.RecordName + ".txt";
                 }
                 return File(path, MIME, name);
             }
