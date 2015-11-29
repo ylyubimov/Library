@@ -104,7 +104,7 @@ namespace Library.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Records");
             }
         }
 
