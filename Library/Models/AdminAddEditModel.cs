@@ -27,6 +27,8 @@ namespace Library.Models
 
         public string CreationDate { get; set; }
 
+        public DateTime AdditionDate { get; set; }
+
         public string Annotation { get; set; }
 
         public string RecordDescription { get; set; }

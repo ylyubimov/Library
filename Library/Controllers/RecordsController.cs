@@ -139,6 +139,7 @@ namespace Library.Controllers
             record.Annotation = model.Annotation;
             record.CreationDate = model.CreationDate;
             record.Recomended = model.Recomended;
+            record.AdditionDate = DateTime.Now;
         }
 
         [Authorize]
@@ -236,6 +237,7 @@ namespace Library.Controllers
                     Record newRecord = new Record();
                     newRecord.RecordPublisher = new Publisher();
                     editRecord(newRecord, model);
+                    
                     newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
                     db.SaveChanges();
