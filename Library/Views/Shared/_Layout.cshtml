@@ -49,12 +49,15 @@
                 @{Html.EndForm();}
             </div>
 
-            <div class="col-lg-2 col-sm-2 col-md-2">
+            <div class="col-lg-2 col-sm-2 col-md-2 buttons">
                 @if (User.Identity.IsAuthenticated)
                 {
                     @Html.AntiForgeryToken();
-                    @Html.ActionLink("Новая книга", "Add", "Records", null, new { @class = "btn btn-success" });
-                    @Html.ActionLink("Выйти", "LogOff", "Admin", null, new { @class = "btn btn-success logging" });
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Управление <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Records/Add">Добавить книгу</a></li>
+                        <li><a href="/Admin/LogOff">Выйти</a></li>
+                    </ul>
                 }
                 else
                 {
