@@ -163,7 +163,7 @@ namespace Library.Controllers
             {
                 if (file == null) continue;
                 string fileExtension = System.IO.Path.GetExtension(file.FileName).ToLower();
-                string[] allowedExtensions = { ".pdf", ".djvu", ".txt" };
+                string[] allowedExtensions = { ".pdf", ".djvu", ".txt", ".mp4", ".mp3" };
                 if (allowedExtensions.Contains(fileExtension))
                 {
                     string path = AppDomain.CurrentDomain.BaseDirectory + "Data/";
@@ -206,6 +206,18 @@ namespace Library.Controllers
                     path = "../../Data/" + b.ISBN + ".txt";
                     MIME = "text/rtf";
                     name = b.RecordName + ".txt";
+                }
+                if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".mp4")))
+                {
+                    path = "../../Data/" + b.ISBN + ".mp4";
+                    MIME = "video/mp4";
+                    name = b.RecordName + ".mp4";
+                }
+                if (System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", b.ISBN + ".mp3")))
+                {
+                    path = "../../Data/" + b.ISBN + ".mp3";
+                    MIME = "audio/mpeg";
+                    name = b.RecordName + ".mp3";
                 }
                 return File(path, MIME, name);
             }

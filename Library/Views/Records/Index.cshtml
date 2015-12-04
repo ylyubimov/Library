@@ -97,6 +97,8 @@
                             <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
                             @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")) ||
                                 File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".djvu")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp3")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp4")) ||
                                 File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".txt")))
                             {
                                 @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });

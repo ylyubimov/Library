@@ -34,11 +34,8 @@
             </div>
 
             <div class="col-lg-2 col-sm-2 col-md-2">
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Переход <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="/Records/Index">Книги</a></li>
-                    <li><a href="/Publishers/Index">Издатели</a></li>
-                </ul>
+                @Html.ActionLink("Книги", "Index", "Records", null, new { @class = "btn btn-success logging" })
+                @Html.ActionLink("Издатели", "Index", "Publishers", null, new { @class = "btn btn-success logging" })
             </div>
 
             <div class="col-lg-6 col-sm-6 col-md-6">

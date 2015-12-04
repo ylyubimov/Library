@@ -65,8 +65,12 @@
         </div>
     </div>
     <div class="row">
-        @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.RecordName + ".pdf")))
-        {
+            @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.ISBN + ".pdf")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.ISBN + ".djvu")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.ISBN + ".mp3")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.ISBN + ".mp4")) ||
+                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", Model.ISBN + ".txt")))
+            {
             <div class="col-md-3 col-sm-3">
                 @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = Model.RecordId }, new { @class = "btn btn-success" })
             </div>
