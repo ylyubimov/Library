@@ -1,4 +1,8 @@
 ﻿$(document).ready(function () {
+    if ($("#PublisherId").val() == '')
+        $("#newPublisher").show();
+    else
+        $("#newPublisher").hide();
     $("#PublisherId").change(function () {
         if ($("#PublisherId").val() == '')
             $("#newPublisher").show();

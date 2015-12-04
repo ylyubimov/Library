@@ -7,7 +7,7 @@
             <h3>Название:</h3>
         </div>
         <div class="col-md-9 col-sm-9 record-field">
-            @Html.DisplayFor(model => model.RecordName)
+            @Ajax.ActionLink(Model.RecordName, "Modal", "Records", new { id = Model.RecordId }, new AjaxOptions { UpdateTargetId = "container" }, new { data_toggle = "modal", data_target = "#myModal" })
         </div>
     </div>
 
@@ -74,3 +74,9 @@
     </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div id="container">
+        </div>
+    </div>
+</div>

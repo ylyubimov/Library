@@ -43,13 +43,20 @@
 
             <div class="col-lg-6 col-sm-6 col-md-6">
                 @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-                @Html.DropDownList("search-button", new SelectList(new @List<Object> { "По книгам", "По авторам", "По издателям" }), new { @class = "btn btn-success" } )
+                @Html.DropDownList("search-button", new SelectList(new @List<Object> { "По книгам", "По авторам", "По издателям" }, Request["search-button"]), new { @class = "btn btn-success" })
                 @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
                 <input type="submit" class="btn btn-success" value="Найти" />
                 @{Html.EndForm();}
             </div>
-
-            <div class="col-lg-2 col-sm-2 col-md-2 buttons">
+        </div>
+    </nav>
+    @RenderBody()
+        <hr>
+        <footer>
+            <div class="col-sm-2  buttons">
+                <p>&copy; МФТИ 2015</p>
+            </div>
+            <div class="col-sm-offset-8 col-sm-2  buttons">
                 @if (User.Identity.IsAuthenticated)
                 {
                     @Html.AntiForgeryToken();
@@ -64,12 +71,6 @@
                     @Html.ActionLink("Войти", "Login", "Admin", null, new { @class = "btn btn-success logging" });
                 }
             </div>
-        </div>
-    </nav>
-    @RenderBody()
-        <hr>
-        <footer>
-            <p>&copy; МФТИ 2015</p>
         </footer>
     <!-- /container -->
     <!-- Bootstrap core JavaScript
