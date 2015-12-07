@@ -19,6 +19,7 @@ namespace Library.Models
         public string Number { get; set; }
 
         [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
     }
 }

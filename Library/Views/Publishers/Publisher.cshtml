@@ -44,14 +44,17 @@
         @Html.ActionLink("Редактировать", "Edit", "Publishers", new { id = Model.PublisherId }, new { @class = "btn btn-success publisher-edit" })
     </div>
     <br />
-
-    <div>
-        <h4 align="center">Список книг, опубликованных издательством:</h4>
-    </div>
+  
     @{Library.Models.LibraryContext db = new Library.Models.LibraryContext();
             var records = (from r in db.Records where r.PublisherId == Model.PublisherId select r);
     }
 
+@if (records.Count() > 0)
+{
+    <div>
+        <h4 align="center">Список книг, опубликованных издательством:</h4>
+    </div>
+}
     <div class="row">
         @foreach (var item in records)
             {

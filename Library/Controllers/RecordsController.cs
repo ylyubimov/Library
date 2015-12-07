@@ -93,6 +93,18 @@ namespace Library.Controllers
                     case "По издателям":
                         object model = new PublishersController().Search(Request);
                         return View("~/Views/Publishers/Index.cshtml", model);
+                    case "По ISBN":
+                        if (!String.IsNullOrEmpty(request))
+                        {
+                            listToView = formListOfRecords(db.Records.Where(s => s.ISBN == request).ToList());
+                            listToView.Reverse();
+                            return View(listToView);
+                        }
+                        else
+                        {
+                            listToView.Reverse();
+                            return View(listToView);
+                        }
                 }
                 listToView.Reverse();
                 return View(listToView);
@@ -232,13 +244,30 @@ namespace Library.Controllers
             return View(model);
         }
 
+
+        private bool isValidISBN(string ISBN)
+        {
+            using (var db = new LibraryContext())
+            {
+                foreach (var book in db.Records)
+                {
+                    if (book.ISBN == ISBN)
+                    {
+                        ModelState.AddModelError("ISBN", "Книга с таким номером уже существует");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         [HttpPost]
         [Authorize]
         public ActionResult Add(AdminAddEditModel model, IEnumerable<HttpPostedFileBase> fileUpload)
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !ModelState.IsValidField("ISBN"))
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN))
                 {
                     model.Publishers = getPublishersList();
                     return View(model);
@@ -249,7 +278,7 @@ namespace Library.Controllers
                     Record newRecord = new Record();
                     newRecord.RecordPublisher = new Publisher();
                     editRecord(newRecord, model);
-                    
+
                     newRecord.RecordPublisher = (from p in db.Publishers where p.PublisherId == realPublisherId select p).First();
                     db.Records.Add(newRecord);
                     db.SaveChanges();
@@ -316,10 +345,13 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !ModelState.IsValidField("ISBN"))
+                if (db.Records.Find(id).ISBN != model.ISBN)
                 {
-                    model.Publishers = getPublishersList();
-                    return View(model);
+                    if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN))
+                    {
+                        model.Publishers = getPublishersList();
+                        return View(model);
+                    }
                 }
                 if (model.PublisherId != 0) // Воспользовались списком
                 {

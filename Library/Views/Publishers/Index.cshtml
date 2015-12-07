@@ -5,7 +5,7 @@
 @model IEnumerable<Library.Models.Publisher>
 <div>
     <h1 class="library-index">
-        Список издателей.
+        Список издателей
     </h1>
 </div>
 
@@ -20,8 +20,7 @@
                     </h2>
                 </div>
                 <div class="mini-box item">
-                    <h4 class="header">@Html.DisplayFor(modelItem => item.PublisherName)</h4>
-                    <h4 class="header">@Html.DisplayFor(modelItem => item.Address)</h4>
+                    <h4 class="header">@Html.DisplayFor(modelItem => item.Email)</h4>
                 </div>
             </div>
         }

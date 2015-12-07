@@ -46,6 +46,7 @@ namespace Library.Models
         public bool Recomended { get; set; }
 
         [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string PublisherEmail { get; set; }
 
         public List<SelectListItem> Publishers { get; set; }

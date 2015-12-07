@@ -40,7 +40,7 @@
 
             <div class="col-lg-6 col-sm-6 col-md-6">
                 @{Html.BeginForm("Index", "Records", FormMethod.Get, new { @class = "search" });}
-                @Html.DropDownList("search-button", new SelectList(new @List<Object> { "По книгам", "По авторам", "По издателям" }, Request["search-button"]), new { @class = "btn btn-success" })
+                @Html.DropDownList("search-button", new SelectList(new @List<Object> { "По книгам", "По авторам", "По издателям", "По ISBN" }, Request["search-button"]), new { @class = "btn btn-success" })
                 @Html.TextBox("find", null, new { @class = "searchBox", placeholder = "Поиск" })
                 <input type="submit" class="btn btn-success" value="Найти" />
                 @{Html.EndForm();}

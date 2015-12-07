@@ -1,9 +1,8 @@
 ﻿@model List<Library.Models.Record>
 @helper DisplayBooks(bool recommended, int size)
 {
-
-<div class="container view">
-    <div class="row">
+    <div class="container view">
+        <div class="row">
             @foreach (var item in Model.Take(size))
             {
                 if (!(item.Recomended ^ recommended))
@@ -36,8 +35,8 @@
 
                             <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
                             @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".djvu")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".txt")))
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".djvu")) ||
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".txt")))
                             {
                                 @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
                             }
@@ -49,24 +48,18 @@
                             }
                         </div>
                     </div>
-                }
-            }
+                                        }
+                                    }
         </div>
-</div>
+    </div>
 }
 
-<div>
-    <h1 class="library-index">
-        Здесь собраны все книги нашей библиотеки
-    </h1>
-</div>
-
-@if (Request["find"].IsEmpty())
+@helper DisplayBooksInAmount(int count)
 {
-    <h2>Недавно добавленные:</h2> 
+
     <div class="container view">
         <div class="row">
-            @foreach (var item in Model.Take(5))
+            @foreach (var item in Model.Take(count))
             {
                 {
                     <div class="col-md-15">
@@ -96,10 +89,10 @@
 
                             <p><h5>@Html.DisplayFor(modelItem => item.RecordDescription)</h5></p>
                             @if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".pdf")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".djvu")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp3")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp4")) ||
-                                File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".txt")))
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".djvu")) ||
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp3")) ||
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".mp4")) ||
+                            File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Data/", item.ISBN + ".txt")))
                             {
                                 @Html.ActionLink("Скачать", "downloadFile", "Records", new { id = item.RecordId }, new { @class = "btn btn-success" });
                             }
@@ -111,24 +104,39 @@
                             }
                         </div>
                     </div>
-                }
-            }
+                                        }
+                                    }
         </div>
     </div>
 }
 
+<div>
+    <h1 class="library-index">
+        Здесь собраны все книги нашей библиотеки
+    </h1>
+</div>
+
 @if (Request["find"].IsEmpty())
 {
+    <h2>Недавно добавленные:</h2>
+    @DisplayBooksInAmount(5);
     <h2>Избранные книги:</h2>
     @DisplayBooks(true, 5);
+    <h2>Коллекция:</h2>
+    @DisplayBooks(false, @Model.Count());
+}
+else
+{
+    <h2>Коллекция:</h2>
+    @DisplayBooksInAmount(Model.Count());
 }
 
 
-<div id="show-all" class="btn btn-success">Показать остальные</div>
-<div class="hidden-books">
+<!--<div id="show-all" class="btn btn-success">Показать остальные</div>-->
+<!--<div class="hidden-books">
     <h2>Коллекция:</h2>
-    @DisplayBooks(false, 999);
-</div>
+    Here should be display 9999 books;-->
+<!--</div>-->
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
