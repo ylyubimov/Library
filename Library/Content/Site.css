@@ -55,7 +55,7 @@ a.disabled {
 }
 
 h1 {
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .header{
@@ -65,7 +65,7 @@ h1 {
 h2 {
     display: block;
     text-align: center;
-    font-size: 25px;
+    font-size: 20px;
     color: #666;
 }
 
@@ -477,4 +477,8 @@ label:before {
         width: 20%;
         float: left;
     }
+}
+
+.hidden-books{
+    display: none;
 }

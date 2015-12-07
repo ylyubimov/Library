@@ -39,7 +39,7 @@
         <div class="editor-field">
             <label>
                 Дата создания
-                @Html.TextBoxFor(model => model.CreationDate, new { @class = "input-field" })
+                @Html.TextBoxFor(model => model.CreationDate, new { @class = "input-field", @type = "date" })
             </label>
             @Html.ValidationMessageFor(model => model.CreationDate, " ")
         </div>

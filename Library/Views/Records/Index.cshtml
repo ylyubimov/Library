@@ -123,6 +123,17 @@
     @DisplayBooks(true, 5);
 }
 
-    
-<h2>Коллекция:</h2>
-@DisplayBooks(false, 999);
+
+<div id="show-all" class="btn btn-success">Показать остальные</div>
+<div class="hidden-books">
+    <h2>Коллекция:</h2>
+    @DisplayBooks(false, 999);
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $("#show-all").click(function () {
+        $(".hidden-books").show();
+        $("#show-all").hide();
+    });
+</script>
