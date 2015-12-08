@@ -124,7 +124,14 @@
     <h2>Недавно добавленные:</h2>
     @DisplayBooksInAmount(5);
     <h2>Избранные книги:</h2>
-    @DisplayBooks(true, 5);
+
+    <div class="5books">
+        @DisplayBooks(true, 5));
+    </div>
+    <div class="allbooks" style="display:none">
+        @DisplayBooks(true, @Model.Count());
+    </div>
+
     <h2>Коллекция:</h2>
     
     <div class="5books">
