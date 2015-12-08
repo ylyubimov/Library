@@ -33,26 +33,6 @@ namespace Library.Controllers
             return PartialView("_Modal");
         }
 
-        private List<Record> formListOfRecords(List<Record> dbRecords)
-        {
-            var records = new List<Record>();
-            for (int i = 0; i < dbRecords.Count(); ++i)
-            {
-                if (dbRecords[i].Recomended)
-                {
-                    records.Add(dbRecords[i]);
-                }
-            }
-            for (int i = 0; i < dbRecords.Count(); ++i)
-            {
-                if (!dbRecords[i].Recomended)
-                {
-                    records.Add(dbRecords[i]);
-                }
-            }
-            return records;
-        }
-
         public ActionResult Index()
         {
             if (Request.IsAjaxRequest())
@@ -60,7 +40,7 @@ namespace Library.Controllers
 
             using (LibraryContext db = new LibraryContext())
             {
-                var listToView = formListOfRecords(db.Records.ToList());
+                var listToView = db.Records.ToList();
                 string request = Request["find"];
                 string type = Request["search-button"];
                 switch (type)
@@ -68,7 +48,7 @@ namespace Library.Controllers
                     case "По книгам":
                         if (!String.IsNullOrEmpty(request))
                         {
-                            listToView = formListOfRecords(db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(request) || s.RecordDescription != null && s.RecordDescription.Contains(request)).ToList());
+                            listToView = db.Records.Where(s => s.RecordName != null && s.RecordName.Contains(request) || s.RecordDescription != null && s.RecordDescription.Contains(request)).ToList();
                             listToView.Reverse();
                             return View(listToView);
                         }
@@ -81,7 +61,7 @@ namespace Library.Controllers
                     case "По авторам":
                         if (!String.IsNullOrEmpty(request))
                         {
-                            listToView = formListOfRecords(db.Records.Where(s => s.AuthorName != null && s.AuthorName.Contains(request)).ToList());
+                            listToView = db.Records.Where(s => s.AuthorName != null && s.AuthorName.Contains(request)).ToList();
                             listToView.Reverse();
                             return View(listToView);
                         }
@@ -96,7 +76,7 @@ namespace Library.Controllers
                     case "По ISBN":
                         if (!String.IsNullOrEmpty(request))
                         {
-                            listToView = formListOfRecords(db.Records.Where(s => s.ISBN == request).ToList());
+                            listToView = db.Records.Where(s => s.ISBN == request).ToList();
                             listToView.Reverse();
                             return View(listToView);
                         }
@@ -267,7 +247,7 @@ namespace Library.Controllers
         {
             using (LibraryContext db = new LibraryContext())
             {
-                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN))
+                if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN) || !ModelState.IsValidField("CreationDate"))
                 {
                     model.Publishers = getPublishersList();
                     return View(model);
@@ -347,7 +327,7 @@ namespace Library.Controllers
             {
                 if (db.Records.Find(id).ISBN != model.ISBN)
                 {
-                    if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN))
+                    if (!ModelState.IsValidField("RecordName") || !ModelState.IsValidField("RecordAuthor") || !isValidISBN(model.ISBN) || !ModelState.IsValidField("CreationDate"))
                     {
                         model.Publishers = getPublishersList();
                         return View(model);

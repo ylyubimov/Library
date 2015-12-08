@@ -10,7 +10,7 @@
         @Html.ValidationSummary(true)
         <div class="editor-field">
             <label>
-                Название
+                Название*
                 @Html.TextBoxFor(model => model.RecordName, new { @class = "input-field" })
             </label>
             @Html.ValidationMessageFor(model => model.RecordName)
@@ -24,14 +24,14 @@
         </div>
         <div class="editor-field">
             <label>
-                Автор книги
+                Автор книги*
                 @Html.TextBoxFor(model => model.RecordAuthor, new { @class = "input-field" })
             </label>
             @Html.ValidationMessageFor(model => model.RecordAuthor)
         </div>
         <div class="editor-field">
             <label>
-                ISBN
+                ISBN*
                 @Html.TextBoxFor(model => model.ISBN, new { @class = "input-field" })
             </label>
             @Html.ValidationMessageFor(model => model.ISBN, " ")
@@ -81,7 +81,7 @@
                 </div>
                 <div class="editor-field">
                     <label>
-                        Название
+                        Название*
                         @Html.TextBoxFor(model => model.PublisherName, new { @class = "input-field" })
                     </label>
                     @Html.ValidationMessageFor(model => model.PublisherName)

@@ -3,10 +3,13 @@
 {
     <div class="container view">
         <div class="row">
-            @foreach (var item in Model.Take(size))
+            @{int counter = 0;
+            }
+            @foreach (var item in Model)
             {
                 if (!(item.Recomended ^ recommended))
                 {
+                    counter += 1;
                     <div class="col-md-15">
                         <div class="mini-box item title">
                             <h2>
@@ -49,14 +52,14 @@
                         </div>
                     </div>
                                         }
-                                    }
+                                        if (counter == size) { break; }
+                                        }
         </div>
     </div>
 }
 
 @helper DisplayBooksInAmount(int count)
 {
-
     <div class="container view">
         <div class="row">
             @foreach (var item in Model.Take(count))
